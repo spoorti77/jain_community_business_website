@@ -1,0 +1,134 @@
+<!-- Back Button -->
+<button class="back-button" onclick="window.history.back()">← Back</button>
+
+<!-- Section Heading -->
+<h2 class="invited-heading">Invited Members for {{ event.title }}</h2>
+
+<!-- Download PDF Button -->
+<button class="download-button" onclick="downloadPDF()">Download PDF</button>
+
+<!-- Cards Layout -->
+<div class="invited-cards-container">
+  
+    {% if invited_members %}
+        {% for member in invited_members %}
+            <div class="invited-card">
+                <h3 class="invited-name">{{ member.first_name }} {{ member.last_name }}</h3>
+                <p class="invited-detail">{{ member.email }}</p>
+                <p class="invited-detail">{{ member.phone_number }}</p>
+                <p class="invited-detail">{{ member.residential_address }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="invited-empty">No members invited yet.</p>
+    {% endif %}
+</div>
+
+<!-- Styling -->
+<style>
+/* Back Button */
+.back-button {
+    background-color: #8B4513;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+}
+.back-button:hover {
+    background-color: #5C4033;
+}
+
+/* Section Heading */
+.invited-heading {
+    color: #5C4033;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Download Button */
+.download-button {
+    background-color: #a97458;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    margin: 10px auto 20px;
+    display: block;
+}
+.download-button:hover {
+    background-color: #5C4033;
+}
+
+/* Cards Container */
+.invited-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Individual Card */
+.invited-card {
+    width: 30%;
+    min-width: 200px;
+    background-color: #fdf1e6;
+    border: 2px dashed #a97458;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 1px 4px rgba(92, 64, 51, 0.2);
+    font-family: 'Nunito', sans-serif;
+    text-align: left;
+}
+
+/* Name Heading */
+.invited-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #5C4033;
+    margin-bottom: 6px;
+}
+
+/* Details Styling */
+.invited-detail {
+    font-size: 14px;
+    color: #8B4513;
+    margin: 2px 0;
+}
+
+/* Empty State */
+.invited-empty {
+    color: #8B4513;
+    font-style: italic;
+    padding: 20px;
+    background-color: #fdf1e6;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+    width: 100%;
+}
+</style>
+
+<!-- JavaScript for PDF Download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+    const element = document.querySelector('.invited-cards-container');
+    const opt = {
+        margin:       0.3,
+        filename:     'invited_members_{{ event.name|slugify }}.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+</script>

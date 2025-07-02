@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJ & VIN LOVE - Anniversary Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .font-great-vibes {
+            font-family: 'Great Vibes';
+        }
+
+        /* Background Animations */
+        .background-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-element {
+            position: absolute;
+            user-select: none;
+            transition: opacity 1s;
+        }
+
+        .floating-text {
+            color: rgba(196, 181, 253, 0.3);
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .floating-emoji {
+            color: rgba(196, 181, 253, 0.4);
+            font-size: 1.125rem;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .orb-1 {
+            top: 2.5rem;
+            left: 2.5rem;
+            width: 8rem;
+            height: 8rem;
+            background: linear-gradient(to right, rgba(196, 181, 253, 0.2), rgba(251, 207, 232, 0.2));
+        }
+
+        .orb-2 {
+            top: 33.333333%;
+            right: 5rem;
+            width: 6rem;
+            height: 6rem;
+            background: linear-gradient(to right, rgba(147, 197, 253, 0.2), rgba(196, 181, 253, 0.2));
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            bottom: 25%;
+            left: 25%;
+            width: 10rem;
+            height: 10rem;
+            background: linear-gradient(to right, rgba(251, 207, 232, 0.15), rgba(196, 181, 253, 0.15));
+            filter: blur(80px);
+            animation-delay: 4s;
+        }
+
+        .orb-4 {
+            bottom: 2.5rem;
+            right: 33.333333%;
+            width: 7rem;
+            height: 7rem;
+            background: linear-gradient(to right, rgba(165, 180, 252, 0.2), rgba(147, 197, 253, 0.2));
+            animation-delay: 6s;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.02;
+            background-image: 
+                linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: #000;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #374151;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            border: 1px solid #d1d5db;
+            color: #374151;
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            transform: scale(1.05);
+        }
+
+        /* Layout */
+        .main-container {
+            display: flex;
+            max-width: 80rem;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 20rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid #e5e7eb;
+            min-height: calc(100vh - 73px);
+            padding: 1.5rem;
+        }
+
+        .nav-button {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-button.active {
+            background: #000;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .nav-button:not(.active) {
+            color: #374151;
+            background: transparent;
+        }
+
+        .nav-button:not(.active):hover {
+            background: #f3f4f6;
+            transform: scale(1.02);
+        }
+
+        .status-section {
+            margin-top: 2rem;
+        }
+
+        .status-title {
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .status-item:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .status-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .status-icon.love {
+            background: linear-gradient(to right, #ec4899, #a855f7);
+        }
+
+        .status-icon.distance {
+            background: linear-gradient(to right, #3b82f6, #6366f1);
+            animation-delay: 1s;
+        }
+
+        .status-icon.anniversary {
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            animation-delay: 2s;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .stat-card.love {
+            background: linear-gradient(to bottom right, #ec4899, #a855f7);
+        }
+
+        .stat-card.distance {
+            background: linear-gradient(to bottom right, #3b82f6, #6366f1);
+            animation-delay: 1s;
+        }
+
+        .stat-card.anniversary {
+            background: linear-gradient(to bottom right, #a855f7, #ec4899);
+            animation-delay: 2s;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-status {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+        }
+
+        .stat-emoji {
+            font-size: 1.5rem;
+        }
+
+        .stat-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Memory Grid */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Photo Flip Card */
+        .memory-card {
+            background: transparent;
+            width: 100%;
+            height: 380px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .memory-card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .memory-card:hover .memory-card-front,
+        .memory-card:hover .memory-card-back {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-image {
+            width: 100%;
+            height: 12rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memory-image.lego {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+        }
+
+        .memory-image.hotwell {
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+        }
+
+        .memory-image.flower {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+        }
+
+        .memory-image.food {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+        }
+
+        .memory-image.prayer {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+        }
+
+        .memory-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .memory-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        /* Back side content */
+        .memory-photo {
+            width: 100%;
+            height: 220px;
+            border-radius: 0.75rem;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-back-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .memory-back-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(168, 85, 247, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .memory-card:hover .flip-hint {
+            opacity: 1;
+        }
+
+        /* Countdown Section */
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.5s;
+        }
+
+        .countdown-container:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown-time {
+            font-size: 3.75rem;
+            font-weight: bold;
+            color: #a855f7;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-subtitle {
+            color: #6b7280;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .countdown-item {
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .countdown-item:hover {
+            transform: scale(1.05);
+        }
+
+        .countdown-item-emoji {
+            font-size: 1.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-item-title {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .countdown-item-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* Story Section */
+        .story-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            padding: 2rem;
+            transition: all 0.5s;
+        }
+
+        .story-container:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-text {
+            color: #374151;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-highlight {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        /* Placeholder */
+        .placeholder {
+            border: 2px dashed #d1d5db;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+
+        .placeholder:hover {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        .placeholder-icon {
+            color: #9ca3af;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-text {
+            color: #6b7280;
+        }
+
+        /* Next Meeting */
+        .next-meeting {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .next-meeting:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .next-meeting-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .next-meeting-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .next-meeting-time {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #a855f7;
+        }
+
+        .next-meeting-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .next-meeting-emoji {
+            font-size: 2.5rem;
+        }
+
+        /* Animations */
+        @keyframes heartFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes gentle-float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(-10px) translateX(5px) rotate(1deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-5px) translateX(-3px) rotate(-0.5deg);
+                opacity: 0.7;
+            }
+            75% {
+                transform: translateY(-8px) translateX(2px) rotate(0.5deg);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes gentle-pulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes gentle-bounce {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes gentle-glow {
+            0%, 100% {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            }
+            50% {
+                box-shadow: 0 10px 15px -3px rgba(147, 51, 234, 0.1), 0 4px 6px -2px rgba(147, 51, 234, 0.05);
+            }
+        }
+
+        @keyframes slow-pulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-gentle-float {
+            animation: gentle-float 20s ease-in-out infinite;
+        }
+
+        .animate-gentle-pulse {
+            animation: gentle-pulse 3s ease-in-out infinite;
+        }
+
+        .animate-gentle-bounce {
+            animation: gentle-bounce 2s ease-in-out infinite;
+        }
+
+        .animate-gentle-glow {
+            animation: gentle-glow 4s ease-in-out infinite;
+        }
+
+        .animate-slow-pulse {
+            animation: slow-pulse 8s ease-in-out infinite;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .memory-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .countdown-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animations -->
+    <div class="background-container">
+        <!-- Floating Elements -->
+        <div id="floating-elements"></div>
+        
+        <!-- Gradient Orbs -->
+        <div class="gradient-orb orb-1 animate-slow-pulse"></div>
+        <div class="gradient-orb orb-2 animate-slow-pulse"></div>
+        <div class="gradient-orb orb-3 animate-slow-pulse"></div>
+        <div class="gradient-orb orb-4 animate-slow-pulse"></div>
+        
+        <!-- Grid Pattern -->
+        <div class="grid-pattern"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">SJ & VIN LOVE</h1>
+            <div class="header-buttons">
+                <button class="btn-primary" onclick="heartRain()">Miss You 💜</button>
+                <button class="btn-secondary" id="music-btn" onclick="toggleMusic()">▶️ Play Music</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-button" onclick="showTab('dashboard')">Dashboard</button>
+                <button class="nav-button active" onclick="showTab('memories')">Our Memories</button>
+                <button class="nav-button" onclick="showTab('countdown')">Countdown</button>
+                <button class="nav-button" onclick="showTab('story')">Our Story</button>
+            </nav>
+
+            <div class="status-section">
+                <h3 class="status-title">RELATIONSHIP STATUS</h3>
+                <div class="status-item">
+                    <div class="status-icon love animate-gentle-pulse">💜</div>
+                    <span>In Love</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon distance animate-gentle-pulse">🔥</div>
+                    <span>Long Distance</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon anniversary animate-gentle-pulse">✨</div>
+                    <span>Anniversary</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="hidden">
+                <h2 class="section-title">RELATIONSHIP STATS</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card love animate-gentle-glow">
+                        <div class="stat-header">
+                            <span class="stat-status">Connected</span>
+                            <span class="stat-emoji animate-gentle-bounce">💜</span>
+                        </div>
+                        <h3 class="stat-title">Love Level</h3>
+                        <p class="stat-subtitle">@sj&vin</p>
+                        <div class="stat-metrics">
+                            <div>
+                                <div class="metric-value">∞</div>
+                                <div class="metric-label">Love Points</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">24/7</div>
+                                <div class="metric-label">Thinking</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">100%</div>
+                                <div class="metric-label">Devotion</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card distance animate-gentle-glow">
+                        <div class="stat-header">
+                            <span class="stat-status">Connected</span>
+                            <span class="stat-emoji animate-gentle-bounce">🌍</span>
+                        </div>
+                        <h3 class="stat-title">Distance</h3>
+                        <p class="stat-subtitle">@longdistance</p>
+                        <div class="stat-metrics">
+                            <div>
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Miles Apart</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">∞</div>
+                                <div class="metric-label">Heart Miles</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">Soon</div>
+                                <div class="metric-label">Together</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card anniversary animate-gentle-glow">
+                        <div class="stat-header">
+                            <span class="stat-status">Connected</span>
+                            <span class="stat-emoji animate-gentle-bounce">🎉</span>
+                        </div>
+                        <h3 class="stat-title">Anniversary</h3>
+                        <p class="stat-subtitle">@celebration</p>
+                        <div class="stat-metrics">
+                            <div>
+                                <div class="metric-value">1</div>
+                                <div class="metric-label">Year Strong</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">365</div>
+                                <div class="metric-label">Days Love</div>
+                            </div>
+                            <div>
+                                <div class="metric-value">∞</div>
+                                <div class="metric-label">More Years</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="placeholder">
+                    <div class="placeholder-icon animate-gentle-bounce">📸</div>
+                    <p class="placeholder-text">Add a new memory together</p>
+                </div>
+
+                <div class="next-meeting">
+                    <h3 class="next-meeting-title">NEXT MEETING</h3>
+                    <div class="next-meeting-content">
+                        <div>
+                            <div class="next-meeting-time animate-gentle-pulse" id="countdown-display">Loading...</div>
+                            <p class="next-meeting-subtitle">Until we're together again</p>
+                        </div>
+                        <div class="next-meeting-emoji animate-gentle-bounce">✨</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Memories Tab -->
+            <div id="memories-tab">
+                <h2 class="section-title">OUR SPECIAL MEMORIES</h2>
+                <div class="memory-grid">
+                    <!-- Lego Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image lego">
+                                    <span class="animate-gentle-bounce">🧱</span>
+                                </div>
+                                <h3 class="memory-title">Building Dreams Together</h3>
+                                <p class="memory-description">Our Lego adventures - creating worlds piece by piece, just like our love story</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=220&fit=crop" alt="Lego building" class="memory-photo">
+                                <h3 class="memory-back-title">Building Dreams Together 🧱</h3>
+                                <p class="memory-back-description">Hours spent building castles, cities, and dreams. Every brick we placed together was a promise of our future. You make everything more colorful, just like our Lego creations!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotwell Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image hotwell">
+                                    <span class="animate-gentle-bounce">♨️</span>
+                                </div>
+                                <h3 class="memory-title">Hotwell Relaxation</h3>
+                                <p class="memory-description">Soaking in warm waters, melting away stress, finding peace in each other's presence</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=300&h=220&fit=crop" alt="Hot spring" class="memory-photo">
+                                <h3 class="memory-back-title">Hotwell Bliss ♨️</h3>
+                                <p class="memory-back-description">Steam rising around us, your hand in mine, the world fading away. In those warm waters, it was just us - no worries, no distance, just pure connection and love.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flower Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image flower">
+                                    <span class="animate-gentle-bounce">🌸</span>
+                                </div>
+                                <h3 class="memory-title">Garden of Love</h3>
+                                <p class="memory-description">Picking flowers, making bouquets, your beauty outshining every bloom</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=300&h=220&fit=crop" alt="Flower garden" class="memory-photo">
+                                <h3 class="memory-back-title">Garden of Love 🌸</h3>
+                                <p class="memory-back-description">Walking through fields of flowers, you picked the prettiest ones, but nothing compared to your radiant smile. Every petal reminded me why I fell for you - beautiful, delicate, and absolutely perfect.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image food">
+                                    <span class="animate-gentle-bounce">🍽️</span>
+                                </div>
+                                <h3 class="memory-title">Cooking Adventures</h3>
+                                <p class="memory-description">Kitchen chaos, burnt meals, perfect moments - every dish tastes better with you</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=220&fit=crop" alt="Cooking together" class="memory-photo">
+                                <h3 class="memory-back-title">Cooking Adventures 🍽️</h3>
+                                <p class="memory-back-description">Flour fights, burnt toast, and the most delicious disasters! Our kitchen became our playground, and every meal we made together was seasoned with laughter and love. You're my favorite ingredient!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prayer Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image prayer">
+                                    <span class="animate-gentle-bounce">🙏</span>
+                                </div>
+                                <h3 class="memory-title">Praying for Each Other</h3>
+                                <p class="memory-description">Silent moments, whispered hopes, holding each other in our hearts and prayers</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=220&fit=crop" alt="Peaceful moment" class="memory-photo">
+                                <h3 class="memory-back-title">Praying for Each Other 🙏</h3>
+                                <p class="memory-back-description">In quiet moments, we lift each other up in prayer. Distance can't separate souls that are connected by faith and love. Every prayer I whisper carries your name and my endless devotion.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bonus Memory Card -->
+                    <div class="memory-card" onclick="flipCard(this)">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <div class="memory-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                    <span class="animate-gentle-bounce">💫</span>
+                                </div>
+                                <h3 class="memory-title">All Our Moments</h3>
+                                <p class="memory-description">Every laugh, every tear, every heartbeat - our love story continues</p>
+                                <div class="flip-hint">Click to flip</div>
+                            </div>
+                            <div class="memory-card-back">
+                                <img src="https://images.unsplash.com/photo-1518621012118-1d2cc6b3d49a?w=300&h=220&fit=crop" alt="Together forever" class="memory-photo">
+                                <h3 class="memory-back-title">All Our Moments 💫</h3>
+                                <p class="memory-back-description">From Lego blocks to hot springs, from flower gardens to kitchen adventures, from prayers to dreams - every moment with you is a treasure. Here's to a million more memories, my love!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countdown Tab -->
+            <div id="countdown-tab" class="hidden">
+                <h2 class="section-title">COUNTDOWN TO REUNION</h2>
+                <div class="countdown-container">
+                    <div class="countdown-time animate-gentle-pulse" id="countdown-main">Loading...</div>
+                    <p class="countdown-subtitle">Until I can hold you again</p>
+                    <div class="countdown-grid">
+                        <div class="countdown-item">
+                            <div class="countdown-item-emoji animate-gentle-bounce">💜</div>
+                            <div class="countdown-item-title">Missing You</div>
+                            <div class="countdown-item-subtitle">Every second</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-item-emoji animate-gentle-bounce">🔥</div>
+                            <div class="countdown-item-title">Burning For You</div>
+                            <div class="countdown-item-subtitle">Always</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-item-emoji animate-gentle-bounce">✨</div>
+                            <div class="countdown-item-title">Dreaming</div>
+                            <div class="countdown-item-subtitle">Of our reunion</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story Tab -->
+            <div id="story-tab" class="hidden">
+                <h2 class="section-title">OUR PASSIONATE STORY</h2>
+                <div class="story-container">
+                    <p class="story-text">
+                        They say love isn't perfect, but ours is perfectly sinful! 😈 We've mastered the art of "breaking up" 
+                        more times than we can count, but let's be honest... the makeup sessions are absolutely worth it. 
+                        Every fight just leads to us remembering exactly why we can't keep our hands off each other.
+                    </p>
+                    <p class="story-text">
+                        Remember when we thought we were "done for good" that one time? 🔥 We lasted exactly 3 hours before 
+                        one of us showed up at the other's door with that look in our eyes. Our friends probably think we're 
+                        crazy, but they don't understand the electricity between us.
+                    </p>
+                    <p class="story-text">
+                        Every stolen kiss, every whispered promise in the dark, every time we lose ourselves in each other... 
+                        that's when I know we're meant to burn together. The distance only makes the fire burn hotter. 🔥💜
+                    </p>
+                    <p class="story-text story-highlight">
+                        So here's to us - the couple who fights like we're enemies and loves like we're soulmates. Our 
+                        passion burns brighter than any flame, and I can't wait to feel your touch again. Forever yours, 
+                        body and soul. 🔥✨
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Audio element for background music -->
+    <audio id="background-music" loop>
+        <source src="your-love-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Global variables
+        let currentTab = 'memories';
+        let isPlaying = false;
+        let audio = document.getElementById('background-music');
+        
+        // Initialize floating elements
+        function initFloatingElements() {
+            const container = document.getElementById('floating-elements');
+            const elements = ['💜', '✨', '🔥', 'SJ&Vin'];
+            
+            for (let i = 0; i < 12; i++) {
+                const element = document.createElement('div');
+                const type = elements[Math.floor(Math.random() * elements.length)];
+                
+                element.className = `floating-element animate-gentle-float ${type === 'SJ&Vin' ? 'floating-text' : 'floating-emoji'}`;
+                element.textContent = type;
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 10 + 's';
+                element.style.animationDuration = (15 + Math.random() * 10) + 's';
+                
+                container.appendChild(element);
+            }
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = ['dashboard', 'memories', 'countdown', 'story'];
+            tabs.forEach(tab => {
+                document.getElementById(tab + '-tab').classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+        }
+
+        // Photo flip functionality
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        // Countdown functionality
+        function updateCountdown() {
+            const targetDate = new Date('2025-08-15T00:00:00');
+            const now = new Date();
+            const diff = targetDate.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                document.getElementById('countdown-display').textContent = 'Together Now! 💑';
+                document.getElementById('countdown-main').textContent = 'Together Now! 💑';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            const countdownText = `${days}d ${hours}h ${minutes}m`;
+            document.getElementById('countdown-display').textContent = countdownText;
+            document.getElementById('countdown-main').textContent = countdownText;
+        }
+
+        // Music toggle
+        function toggleMusic() {
+            const musicBtn = document.getElementById('music-btn');
+            
+            if (isPlaying) {
+                audio.pause();
+                musicBtn.textContent = '▶️ Play Music';
+                isPlaying = false;
+            } else {
+                audio.play().catch(console.error);
+                musicBtn.textContent = '⏸️ Pause Music';
+                isPlaying = true;
+            }
+        }
+
+        // Heart rain effect
+        function heartRain() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = '💜';
+                heart.style.position = 'fixed';
+                heart.style.top = '-10px';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '1000';
+                heart.style.animation = 'heartFall 3s linear forwards';
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }
+
+            setTimeout(() => {
+                alert("The way you make me feel... can't wait to show you in person 🔥💜");
+            }, 2000);
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initFloatingElements();
+            updateCountdown();
+            
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
+            
+            // Set up audio
+            audio.volume = 0.3;
+            
+            // Audio event listeners
+            audio.addEventListener('ended', () => {
+                isPlaying = false;
+                document.getElementById('music-btn').textContent = '▶️ Play Music';
+            });
+            
+            audio.addEventListener('pause', () => {
+                isPlaying = false;
+                document.getElementById('music-btn').textContent = '▶️ Play Music';
+            });
+            
+            audio.addEventListener('play', () => {
+                isPlaying = true;
+                document.getElementById('music-btn').textContent = '⏸️ Pause Music';
+            });
+        });
+    </script>
+</body>
+</html>

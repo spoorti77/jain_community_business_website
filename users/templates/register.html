@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Your Business - Jain Business Hub</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+        <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.6;
+            color: #374151;
+            background: linear-gradient(135deg, #fef7ed 0%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Benefits Sidebar */
+        .benefits-card {
+            background: linear-gradient(135deg, #90542a 0%, #ce814a 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            position: sticky;
+            top: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .benefits-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .benefits-header .icon {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .benefits-header .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .benefits-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefits-description {
+            color: #fed7aa;
+            margin-bottom: 1.5rem;
+        }
+
+        .benefits-list {
+            list-style: none;
+            space-y: 1rem;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefits-list .check-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #fed7aa;
+            flex-shrink: 0;
+        }
+
+        .benefits-list span {
+            font-size: 0.875rem;
+            color: #fed7aa;
+        }
+
+        /* Main Form Card */
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .form-header {
+            text-align: center;
+            padding: 2rem 2rem 0;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #8B4513;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #8B4513;
+            color: #8B4513;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Form Controls */
+        .form-row {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.cols-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .required::after {
+            content: '*';
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B4513' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 12px;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-input {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #8B4513;
+        }
+
+        .radio-label {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-input {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #8B4513;
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .checkbox-label a {
+            color: #8B4513;
+            text-decoration: none;
+        }
+
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 2rem 0;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Login Link */
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .login-link a {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hidden Elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Icons */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .benefits-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .form-row.cols-2,
+            .form-row.cols-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .form-content {
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* OTP Styles */
+        .phone-otp-container,
+        .otp-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .phone-otp-container .form-input,
+        .otp-container .form-input {
+            flex: 1;
+        }
+
+        .otp-btn,
+        .resend-btn {
+            padding: 0.75rem 1rem;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .otp-btn:hover,
+        .resend-btn:hover {
+            background: #280303;
+        }
+
+        .otp-btn:disabled,
+        .resend-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .otp-timer {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .otp-status {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .otp-status.success {
+            color: #059669;
+        }
+
+        .otp-status.error {
+            color: #dc2626;
+        }
+
+        .otp-actions {
+            display: flex;
+            align-items: end;
+            height: 100%;
+            padding-bottom: 0.75rem;
+        }
+
+        .phone-verified {
+            border-color: #059669 !important;
+            background-color: #f0fdf4;
+        }
+
+        .otp-verified {
+            border-color: #059669 !important;
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-grid">
+            <!-- Benefits Sidebar -->
+            <div class="benefits-card">
+                <div class="benefits-header">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18"/>
+                        <path d="M5 21V7l8-4v18"/>
+                        <path d="M19 21V11l-6-4"/>
+                    </svg>
+                    <span class="logo">Jain Business Hub</span>
+                </div>
+                <h2 class="benefits-title">Join Our Network</h2>
+                <p class="benefits-description">Connect with like-minded professionals who share your values</p>
+                <ul class="benefits-list">
+                    <li>
+                        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <span>Access to exclusive business opportunities</span>
+                    </li>
+                    <li>
+                        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <span>Network with ethical Jain entrepreneurs</span>
+                    </li>
+                    <li>
+                        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <span>Showcase services to targeted audience</span>
+                    </li>
+                    <li>
+                        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <span>Participate in community events</span>
+                    </li>
+                    <li>
+                        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <span>Get featured in business directory</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Form -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h1 class="form-title">Create Your Account</h1>
+                    <p class="form-subtitle">Register your business to join our community</p>
+                </div>
+
+                <div class="form-content">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+
+                {% if error %}
+                    <div style="background-color: #f8d7da; color: #721c24; padding: 12px 20px; border: 1px solid #f5c6cb; border-radius: 4px; margin-bottom: 15px;">
+                        <strong>Error:</strong> {{ error }}
+                    </div>
+                {% endif %}
+
+                {% if success %}
+                    <div style="background-color: #d4edda; color: #155724; padding: 12px 20px; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 15px;">
+                        {{ success }}
+                    </div>
+                {% endif %}
+
+                <form method="POST" action="/register/" enctype="multipart/form-data" class="php-email-form" data-aos="fade-up" data-aos-delay="500">
+    {% csrf_token %}
+    
+    <!-- Personal Details Section -->
+    <div class="form-section">
+        <div class="section-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <h3 class="section-title">Personal Details</h3>
+        </div>
+
+        <div class="form-row cols-3">
+            <div class="form-group">
+                <label class="form-label required" for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Enter first name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="middleName">Middle Name</label>
+                <input type="text" id="middleName" name="middleName" class="form-input" placeholder="Enter middle name">
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Enter last name" required>
+            </div>
+        </div>
+
+        <div class="form-row cols-3">
+            <div class="form-group">
+                <label class="form-label" for="gotra">Gotra</label>
+                <input type="text" id="gotra" name="gotra" class="form-input" placeholder="Enter gotra">
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="gender">Gender</label>
+                <select id="gender" name="gender" class="form-select" required>
+                    <option value="">Select gender</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                    <option value="non-binary">Non-Binary</option>
+                    <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row cols-2">
+           <div class="form-group">
+                <label class="form-label" for="bloodGroup">Blood Group</label>
+                <select id="bloodGroup" name="bloodGroup" class="form-input" required>
+                    <option value="" disabled selected>Select your blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A−</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B−</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB−</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O−</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="whatsappNumber">WhatsApp Number</label>
+                <div class="phone-otp-container">
+                    <input type="tel" id="whatsappNumber" name="whatsappNumber" class="form-input" pattern="[0-9]{10}" minlength="10" maxlength="10" placeholder="Enter phone number" >
+                    
+                </div>
+            </div>
+        </div>
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label " for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="Enter email address" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="phone">Phone Number</label>
+                <div class="phone-otp-container">
+                    <input type="tel" id="phone" name="phone" class="form-input" pattern="[0-9]{10}" minlength="10" maxlength="10" placeholder="Enter phone number" required>
+                    <button type="button" id="sendOtpBtn" class="otp-btn" disabled>Send OTP</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row cols-2" id="otpSection" style="display: none;">
+            <div class="form-group">
+                <label class="form-label required" for="otp">Enter OTP</label>
+                <div class="otp-container">
+                    <input type="text" id="otp" name="otp" class="form-input" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                    <button type="button" id="verifyOtpBtn" class="otp-btn">Verify</button>
+                </div>
+                <div class="otp-timer" id="otpTimer" style="display: none;">
+                    <span>Resend OTP in <span id="countdown">60</span>s</span>
+                </div>
+                <div class="otp-status" id="otpStatus"></div>
+            </div>
+            <div class="form-group">
+                <div class="otp-actions">
+                    <button type="button" id="resendOtpBtn" class="resend-btn" style="display: none;">Resend OTP</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label required" for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" minlength="6" placeholder="Create password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" minlength="6" placeholder="Confirm password" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label required" for="picture">Profile Picture</label>
+            <input type="file" id="picture" name="picture" class="form-input" accept="image/*">
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Religious Details Section -->
+    <div class="form-section">
+        <div class="section-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <h3 class="section-title">Religious Details</h3>
+        </div>
+
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label required" for="pant">Pant</label>
+                <select id="pant" name="pant" class="form-select" required>
+                    <option value="">Select Pant</option>
+                    <option value="shwetambar">Shwetambar</option>
+                    <option value="digambar">Digambar</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="pantOptionsContainer">
+                <label class="form-label required">Select Option</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="stanakvasi" name="pantOption" value="stanakvasi" class="radio-input">
+                        <label for="stanakvasi" class="radio-label">Stanakvasi</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="mandir-margi" name="pantOption" value="mandir-margi" class="radio-input">
+                        <label for="mandir-margi" class="radio-label">Mandir-Margi</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="teerapanti" name="pantOption" value="teerapanti" class="radio-input">
+                        <label for="teerapanti" class="radio-label">Teerapanti</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Location Details Section -->
+    <div class="form-section">
+        <div class="section-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <h3 class="section-title">Location Details</h3>
+        </div>
+
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label required" for="marudarplace">Marudar Place</label>
+                <input type="text" id="marudarplace" name="marudarplace" class="form-input" placeholder="Enter marudar place" list="rajasthanCities" required>
+                <datalist id="rajasthanCities"></datalist>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required" for="state">State</label>
+                <select id="state" name="state" class="form-select" required>
+                    <option value="">Select State</option>
+                    <!-- Populated via JS -->
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label required" for="current">Current Place</label>
+                <input type="text" id="current" name="current" class="form-input" placeholder="Enter current place" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required" for="pincode">Pincode</label>
+                <input type="text" id="pincode" name="pincode" class="form-input" placeholder="Enter pincode" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label required" for="address">Residential Address</label>
+            <textarea id="address" name="address" class="form-textarea" placeholder="Enter your complete address" required></textarea>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Business Details Section -->
+    <div class="form-section">
+        <div class="section-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            <h3 class="section-title">Business Details</h3>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label required" for="businessName">Business Name</label>
+            <input type="text" id="businessName" name="businessName" class="form-input" placeholder="Enter business name" required>
+        </div>
+
+        <div class="form-row cols-2">
+            <div class="form-group">
+                <label class="form-label required" for="businessType">Business Type</label>
+                <select id="businessType" name="businessType" class="form-select" required>
+                    <option value="">Select business type</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="retail">Retail</option>
+                    <option value="wholesale">Wholesale</option>
+                    <option value="service">Service Provider</option>
+                    <option value="consulting">Consulting</option>
+                    <option value="technology">Technology</option>
+                    <option value="finance">Finance</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="hospitality">Hospitality</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label required" for="industry">Industry</label>
+                <select id="industry" name="industry" class="form-select" required>
+                    <option value="">Select industry</option>
+                    <option value="textile">Textile</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="food">Food & Beverage</option>
+                    <option value="construction">Construction</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="education">Education</option>
+                    <option value="it">Information Technology</option>
+                    <option value="finance">Financial Services</option>
+                    <option value="logistics">Logistics</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label required" for="baddress">Business Address</label>
+            <textarea id="baddress" name="baddress" class="form-textarea" placeholder="Enter your complete address" required></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="website">Website (Optional)</label>
+            <input type="url" id="website" name="website" class="form-input" placeholder="https://your-website.com">
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Terms and Conditions -->
+    <div class="checkbox-group">
+        <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
+        <label for="terms" class="checkbox-label">
+            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </label>
+    </div>
+
+    <div class="checkbox-group">
+        <input type="checkbox" id="newsletter" name="newsletter" class="checkbox-input" checked>
+        <label for="newsletter" class="checkbox-label">
+            Subscribe to our newsletter for updates and offers
+        </label>
+    </div>
+
+    <button type="submit" class="submit-btn">Register </button>
+
+    <div class="login-link">
+        Already have an account? <a href="/login/">Log in</a>
+    </div>
+    
+<script>
+$(function () {
+  let cityData = [];
+
+  $.getJSON("/static/data/cities.json", function (data) {
+    cityData = data;
+    const states = [...new Set(data.map(item => item.state))].sort();
+    states.forEach(state => {
+      $('#state').append(new Option(state, state));
+    });
+  });
+
+  $('#state').on('change', function () {
+    const state = this.value;
+    const cities = cityData
+      .filter(city => city.state === state)
+      .map(city => city.name);
+
+    $('#current').autocomplete({
+      source: [...new Set(cities)].sort()
+    });
+  });
+});
+</script>
+
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<script>
+$(function () {
+  let cityData = [];
+
+  $.getJSON("/static/data/cities.json", function (data) {
+    cityData = data;
+    const states = [...new Set(data.map(item => item.state))].sort();
+    states.forEach(state => {
+      $('#state').append(new Option(state, state));
+    });
+  });
+
+  $('#state').on('change', function () {
+    const state = this.value;
+    const cities = cityData
+      .filter(city => city.state === state)
+      .map(city => city.name);
+
+    $('#current').autocomplete({
+      source: [...new Set(cities)].sort()
+    });
+  });
+});
+</script>
+<script src="/static/js/index.js"></script>
+<script src="/static/js/rajasthancities.js"></script>
+
+
+</body>
+</html>

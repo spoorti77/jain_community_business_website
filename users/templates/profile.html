@@ -1,0 +1,957 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.first_name }}'s Profile | Family Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7B3F00;
+            --primary-light: #A05A2C;
+            --primary-lighter: #F0E6DD;
+            --accent: #D4A76A;
+            --text: #333333;
+            --text-light: #666666;
+            --text-lighter: #999999;
+            --bg: #FAF7F5;
+            --card-bg: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+      
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+       .address-cell {
+        max-width: 150px; /* adjust as needed */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        cursor: pointer;
+    }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8b4513;
+            font-family: "Playfair Display", serif;
+        }
+
+        .logo-icon {
+            margin-right: 12px;
+            color: #8b4513;
+            font-size: 1.8rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: rgba(139, 69, 19, 0.05);
+            color: #8b4513;
+        }
+
+        .nav-item.active {
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            font-weight: 600;
+        }
+
+        .nav-item.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #8b4513;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: #8b4513;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 300px;
+            padding: 3rem;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--primary-lighter);
+            padding-bottom: 1.5rem;
+        }
+
+        .profile-header h1 {
+            font-family: "Playfair Display", serif;
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .profile-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .edit-profile-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .edit-profile-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            display: flex;
+            gap: 3.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .profile-card:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Profile Image */
+        .profile-image {
+            flex-shrink: 0;
+            position: relative;
+            align-self: flex-start;
+            text-align: center;
+        }
+
+        .profile-image-container {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 8px solid var(--primary-lighter);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .profile-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .profile-status {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Profile Info */
+        .profile-info {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .profile-section {
+            margin-bottom: 0;
+        }
+
+        .profile-section h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--primary-lighter);
+            font-weight: 600;
+            font-family: "Playfair Display", serif;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-section h3 i {
+            color: var(--accent);
+            font-size: 1.2rem;
+            width: 30px;
+            height: 30px;
+            background: rgba(212, 167, 106, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 1.2rem;
+            align-items: flex-start;
+            transition: var(--transition);
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .info-row:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .label {
+            font-weight: 500;
+            color: var(--text-light);
+            min-width: 180px;
+            flex-shrink: 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .label i {
+            color: var(--text-lighter);
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .value {
+            color: var(--text);
+            word-break: break-word;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .value.empty {
+            color: var(--text-lighter);
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .value a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .value a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        .value a i {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .profile-card {
+                gap: 2.5rem;
+                padding: 2.5rem;
+            }
+            
+            .profile-image-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .profile-card {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+            
+            .profile-image {
+                align-self: center;
+                margin-top: 0;
+            }
+            
+            .profile-info {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 260px;
+            }
+            
+            .main-content {
+                margin-left: 260px;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 2rem;
+            }
+            
+            .profile-image-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .profile-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1.8rem 1.5rem;
+            }
+            
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.8rem 0;
+            }
+            
+            .label {
+                min-width: auto;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-image-container {
+                width: 160px;
+                height: 160px;
+                border-width: 6px;
+            }
+            
+            .profile-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <style>
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 50px 20px;
+    box-sizing: border-box;
+}
+
+/* Modal Content Box */
+.modal-content {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Close Button */
+.modal-content button[onclick="closeEditProfileModal()"] {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.modal-content button[onclick="closeEditProfileModal()"]:hover {
+    transform: scale(1.2);
+}
+
+/* Form Elements */
+.modal-content label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    border-color: #7B3F00;
+    outline: none;
+}
+
+/* Submit Button */
+.modal-content button[type="submit"] {
+    margin-top: 1.5rem;
+    background-color: #7B3F00;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.modal-content button[type="submit"]:hover {
+    background-color: #A05A2C;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+    color: #06A3DA;
+}
+.btn-icon:hover {
+    color: #0a5a7f;
+}
+
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-users logo-icon"></i>
+                    <span>Family Hub</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item "onclick="window.location.href='/dashboard/'" data-tab="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </button>
+
+                <button class="nav-item" onclick="window.location.href='/dashboard/'" data-tab="family">
+                    <i class="fas fa-users"></i>
+                    <span>Manage Family</span>
+                </button>
+
+                <button class="nav-item" onclick="window.location.href='/event-list/'" data-tab="events">
+                    <i class="fas fa-calendar"></i>
+                    <span>Manage Events</span>
+                </button>
+                 <!-- <button class="nav-item" onclick="switchTab('settings')" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>   
+                </button> -->
+                <button class="nav-item" onclick="window.location.href='/logout/'" data-tab="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>  
+                </button>
+            </nav>
+        </aside>
+
+    <div class="main-content">
+        <div class="profile-header">
+            <div>
+                <h1>My Profile</h1>
+               
+
+            </div>
+             <button class="edit-profile-btn" onclick="openEditProfileModal()">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-image">
+                <div class="profile-image-container">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{% static 'default-profile.png' %}" alt="Default Profile">
+                    {% endif %}
+                </div>
+                <span class="profile-status">Active Member</span>
+                <!-- Inline Message -->
+                {% if request.session.address_change_message %}
+                    <div style="color: green; margin-top: 5px;">
+                        {{ request.session.address_change_message }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-info">
+                <div class="profile-section">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-signature"></i> Full Name:</span>
+                        <span class="value">{{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-envelope"></i> Email:</span>
+                        <span class="value">{{ user.email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-phone"></i> Phone:</span>
+                        <span class="value">{{ user.phone_number }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-birthday-cake"></i> Date of Birth:</span>
+                        <span class="value">{{ user.DOB|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-venus-mars"></i> Gender:</span>
+                        <span class="value">{{ user.gender|default:"Not specified" }}</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3><i class="fas fa-praying-hands"></i> Religious Information</h3>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-star-of-david"></i> Gotra:</span>
+                        <span class="value">{{ user.gotra|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-hands-praying"></i> Pant:</span>
+                        <span class="value">{{ user.pant|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-ellipsis-h"></i> Pant Option:</span>
+                        <span class="value">{{ user.pantoption|default:"Not specified" }}</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3><i class="fas fa-map-marked-alt"></i> Location Information</h3>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-city"></i> City:</span>
+                        <span class="value">{{ user.city|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-map"></i> State:</span>
+                        <span class="value">{{ user.state|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-map-pin"></i> Pincode:</span>
+                        <span class="value">{{ user.pincode|default:"Not specified" }}</span>
+                    </div>
+                  <div class="info-row">
+                    <span class="label"><i class="fas fa-home"></i> Residential Address<button class="btn-icon" onclick="openAddressRequestModal()" title="Request Address Change">
+                            <i class="fas fa-edit"></i>
+                        </button>: </span>
+                    <span class="value">
+                        {{ user.residential_address|default:"Not specified" }}
+                        
+                    </span>
+                </div>
+
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-landmark"></i> Marudar Place:</span>
+                        <span class="value">{{ user.marudar_place|default:"Not specified" }}</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3><i class="fas fa-briefcase"></i> Professional Information</h3>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-building"></i> Business Name:</span>
+                        <span class="value">{{ user.business_name|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-tag"></i> Business Type:</span>
+                        <span class="value">{{ user.business_type|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-industry"></i> Industry:</span>
+                        <span class="value">{{ user.industry|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-globe"></i> Website:</span>
+                        <span class="value">
+                            {% if user.website %}
+                                <a href="{{ user.website }}" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> {{ user.website }}
+                                </a>
+                            {% else %}
+                                <span class="empty">Not provided</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label"><i class="fas fa-map-marker-alt"></i> Business Address<button class="btn-icon" onclick="openAddressRequest1Modal()" title="Request Business Address Change">
+                            <i class="fas fa-edit"></i>
+                        </button>:</span>
+                        <span class="value">{{ user.business_address|default:"Not specified" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle sidebar on mobile
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Highlight current nav item
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUrl = window.location.pathname;
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            if (item.getAttribute('href') === currentUrl) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+</body>
+<div class="modal-overlay" id="editProfileModal" style="display: none;">
+  <div class="modal-content" style="background:#fff; padding:2rem; border-radius:12px; max-width:800px; margin:auto; position:relative;">
+    <button style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem;" onclick="closeEditProfileModal()">&times;</button>
+    <h2>Edit Profile</h2>
+    <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data" id="editProfileForm">
+      {% csrf_token %}
+
+      <label>First Name</label>
+      <input type="text" name="first_name" value="{{ user.first_name }}" />
+
+      <label>Middle Name</label>
+      <input type="text" name="middle_name" value="{{ user.middle_name }}" />
+
+      <label>Last Name</label>
+      <input type="text" name="last_name" value="{{ user.last_name }}" />
+
+      <label>Email</label>
+      <input type="email" name="email" value="{{ user.email }}" />
+
+      <label>Phone Number</label>
+      <input type="text" name="phone_number" value="{{ user.phone_number }}" />
+
+      <label>Date of Birth</label>
+      <input type="date" name="dob" value="{{ user.DOB|date:'Y-m-d' }}" />
+
+      <label>Gender</label>
+      <select name="gender">
+        <option value="Male" {% if user.gender == "Male" %}selected{% endif %}>Male</option>
+        <option value="Female" {% if user.gender == "Female" %}selected{% endif %}>Female</option>
+        <option value="Other" {% if user.gender == "Other" %}selected{% endif %}>Other</option>
+      </select>
+
+      <label>Gotra</label>
+      <input type="text" name="gotra" value="{{ user.gotra }}" />
+
+      <label>Pant</label>
+      <input type="text" name="pant" value="{{ user.pant }}" />
+
+      <label>Pant Option</label>
+      <input type="text" name="pantoption" value="{{ user.pantoption }}" />
+
+      <label>City</label>
+      <input type="text" name="city" value="{{ user.city }}" />
+
+      <label>State</label>
+      <input type="text" name="state" value="{{ user.state }}" />
+
+      <label>Pincode</label>
+      <input type="text" name="pincode" value="{{ user.pincode }}" />
+
+      <label>Residential Address</label>
+      <textarea name="residential_address" readonly>{{ user.residential_address }}</textarea>
+
+      <label>Marudar Place</label>
+      <input type="text" name="marudar_place" value="{{ user.marudar_place }}" />
+
+      <label>Business Name</label>
+      <input type="text" name="business_name" value="{{ user.business_name }}" />
+
+      <label>Business Type</label>
+      <input type="text" name="business_type" value="{{ user.business_type }}" />
+
+      <label>Industry</label>
+      <input type="text" name="industry" value="{{ user.industry }}" />
+
+      <label>Website</label>
+      <input type="url" name="website" value="{{ user.website }}" />
+
+      <label>Business Address</label>
+      <textarea name="business_address" readonly>{{ user.business_address }}</textarea>
+
+      <label>Profile Picture</label>
+      <input type="file" name="profile_picture" />
+
+      <button type="submit" style="margin-top:1rem;">Save Changes</button>
+    </form>
+  </div>
+  
+</div>
+<div id="address-request-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Request Address Change</h2>
+            <button onclick="closeAddressRequestModal()" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{% url 'request_address_change' %}">
+                {% csrf_token %}
+                
+                <textarea name="new_address" placeholder="Enter new address" required style="width: 100%; height: 100px;"></textarea>
+                <br><br>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="address-request-modal1" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Request Address Change</h2>
+            <button onclick="closeAddressRequest1Modal()" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{% url 'request_address_change1' %}">
+                {% csrf_token %}
+                    <input type="hidden" name="field_name" value="business_address">
+
+                <textarea name="new_address" placeholder="Enter new address" required style="width: 100%; height: 100px;"></textarea>
+                <br><br>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+function openAddressRequestModal() {
+    document.getElementById('address-request-modal').style.display = 'block';
+}
+function closeAddressRequestModal() {
+    document.getElementById('address-request-modal').style.display = 'none';
+}
+</script>
+<script>
+function openAddressRequest1Modal() {
+    document.getElementById('address-request-modal1').style.display = 'block';
+}
+function closeAddressRequest1Modal() {
+    document.getElementById('address-request-modal1').style.display = 'none';
+}
+</script>
+<script>
+  function openEditProfileModal() {
+    document.getElementById('editProfileModal').style.display = 'block';
+  }
+
+  function closeEditProfileModal() {
+    document.getElementById('editProfileModal').style.display = 'none';
+  }
+
+  // Optional: Close modal when clicking outside content
+  window.onclick = function (event) {
+    const modal = document.getElementById('editProfileModal');
+    if (event.target === modal) {
+      closeEditProfileModal();
+    }
+  };
+</script>
+{% if messages %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    {% for message in messages %}
+        Swal.fire({
+            icon: 'success',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    {% endfor %}
+</script>
+{% endif %}
+
+</html>
