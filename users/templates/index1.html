@@ -1,2173 +1,385 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jain Parivar</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "Inter", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #ffffff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8B4513; /* Earthy brown */
-            font-family: 'Playfair Display', serif;
-        }
-
-        .nav-logo i {
-            margin-right: 10px;
-            font-size: 1.8rem;
-            color: #8B4513;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-menu li {
-            margin-left: 2rem;
-            position: relative;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-size: 0.95rem;
-        }
-
-        .nav-menu a:hover {
-            color: #8B4513;
-        }
-
-        .nav-menu li::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            background: #8B4513;
-            bottom: -5px;
-            left: 0;
-            transition: width 0.3s;
-        }
-
-        .nav-menu li:hover::after {
-            width: 100%;
-        }
-
-        .btn-login {
-            background: #8B4513;
-            color: white !important;
-            padding: 10px 25px;
-            border-radius: 30px;
-            transition: all 0.3s;
-            font-weight: 500;
-            border: 2px solid #8B4513;
-        }
-
-        .btn-login:hover {
-            background: transparent;
-            color: #8B4513 !important;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 2px;
-            background: #555;
-            margin: 4px 0;
-            transition: 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, rgba(255, 253, 250, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%),
-                        url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
-            background-size: cover;
-            padding: 180px 0 100px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            align-items: center;
-            justify-items: center;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-            justify-content: center;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            padding: 14px 35px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: #8B4513;
-            color: white;
-            border: 2px solid #8B4513;
-            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: transparent;
-            color: #8B4513;
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #8B4513;
-            border: 2px solid #8B4513;
-        }
-
-        .btn-secondary:hover {
-            background: #8B4513;
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 1.5rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-
-        .stat:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            display: block;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #8B4513;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding-top: 1rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1rem;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background: #8B4513;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 100px 0;
-            background: #fff;
-        }
-
-        .services-filter {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 25px;
-            border: 1px solid #e0e0e0;
-            background: white;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            color: #555;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: #8B4513;
-            color: white;
-            border-color: #8B4513;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .service-card {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            border: 1px solid #f0f0f0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 0;
-            background: #8B4513;
-            transition: height 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .service-card:hover::before {
-            height: 100%;
-        }
-
-        .service-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(139, 69, 19, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .service-card:hover .service-icon {
-            background: #8B4513;
-        }
-
-        .service-icon i {
-            font-size: 1.5rem;
-            color: #8B4513;
-            transition: all 0.3s;
-        }
-
-        .service-card:hover .service-icon i {
-            color: white;
-        }
-
-        .service-info h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.3rem;
-        }
-
-        .service-info p {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .service-description {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .service-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 1.5rem;
-        }
-
-        .service-price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #8B4513;
-        }
-
-        .service-btn {
-            background: #8B4513;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .service-btn:hover {
-            background: rgba(139, 69, 19, 0.9);
-            transform: translateY(-2px);
-        }
-
-        .services-cta {
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        /* Directory Section */
-        .directory {
-            padding: 100px 0;
-            background: #f9f9f9;
-        }
-
-        .directory-search {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 15px 20px 15px 50px;
-            border: 1px solid #e0e0e0;
-            border-radius: 30px;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .search-box input:focus {
-            border-color: #8B4513;
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
-        }
-
-        #cityFilter {
-            padding: 15px 25px;
-            border: 1px solid #e0e0e0;
-            border-radius: 30px;
-            font-size: 1rem;
-            outline: none;
-            cursor: pointer;
-            background: white;
-            color: #555;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-
-        #cityFilter:focus {
-            border-color: #8B4513;
-        }
-
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .business-card {
-            background: white;
-            border-radius: 10px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            border: 1px solid #f0f0f0;
-        }
-
-        .business-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .business-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .business-logo {
-            width: 70px;
-            height: 70px;
-            background: rgba(139, 69, 19, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.5rem;
-            font-size: 1.8rem;
-            color: #8B4513;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .business-card:hover .business-logo {
-            background: #8B4513;
-            color: white;
-        }
-
-        .business-info h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .business-category {
-            background: rgba(139, 69, 19, 0.1);
-            color: #8B4513;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .business-description {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .business-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .business-detail {
-            display: flex;
-            align-items: center;
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .business-detail i {
-            margin-right: 12px;
-            color: #8B4513;
-            width: 16px;
-            text-align: center;
-        }
-
-        .business-actions {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .contact-btn,
-        .visit-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .contact-btn {
-            background: #8B4513;
-            color: white;
-            border: 2px solid #8B4513;
-        }
-
-        .contact-btn:hover {
-            background: rgba(139, 69, 19, 0.9);
-        }
-
-        .visit-btn {
-            background: transparent;
-            color: #8B4513;
-            border: 2px solid #8B4513;
-        }
-
-        .visit-btn:hover {
-            background: #8B4513;
-            color: white;
-        }
-
-        /* Community Section */
-        .community {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .community-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .community-news h3,
-        .community-events h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 2rem;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .community-news h3::after,
-        .community-events h3::after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 2px;
-            background: #8B4513;
-            bottom: 0;
-            left: 0;
-        }
-
-        .news-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s;
-        }
-
-        .news-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .news-date {
-            color: #8B4513;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .news-date::before {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #8B4513;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .news-item h4 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
-        }
-
-        .news-item p {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .event-item {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s;
-        }
-
-        .event-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .event-date {
-            background: #8B4513;
-            color: white;
-            padding: 1.2rem;
-            border-radius: 10px;
-            text-align: center;
-            margin-right: 1.5rem;
-            min-width: 70px;
-            transition: all 0.3s;
-        }
-
-        .event-item:hover .event-date {
-            background: rgba(139, 69, 19, 0.9);
-        }
-
-        .event-date .day {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .event-date .month {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .event-details h4 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .event-details p {
-            color: #666;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .event-details p i {
-            margin-right: 8px;
-            color: #8B4513;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 100px 0;
-            background: #f9f9f9;
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 2.5rem;
-        }
-
-        .contact-item i {
-            background: rgba(139, 69, 19, 0.1);
-            color: #8B4513;
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.5rem;
-            font-size: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .contact-item:hover i {
-            background: #8B4513;
-            color: white;
-        }
-
-        .contact-item h4 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .contact-item p {
-            color: #666;
-            line-height: 1.7;
-        }
-
-        .contact-form {
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0f0f0;
-        }
-
-        .form-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-form input,
-        .contact-form select,
-        .contact-form textarea {
-            padding: 15px 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .contact-form input:focus,
-        .contact-form select:focus,
-        .contact-form textarea:focus {
-            border-color: #8B4513;
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
-        }
-
-        .contact-form textarea {
-            grid-column: 1 / -1;
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .contact-form button[type="submit"] {
-            width: 100%;
-            padding: 15px;
-            background: #8B4513;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-        }
-
-        .contact-form button[type="submit"]:hover {
-            background: rgba(139, 69, 19, 0.9);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
-        }
-
-        /* Footer */
-        .footer {
-            background: #222;
-            color: white;
-            padding: 80px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8B4513;
-            margin-bottom: 1.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .footer-logo i {
-            margin-right: 10px;
-            font-size: 1.8rem;
-        }
-
-        .footer-section p {
-            color: #bbb;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            width: 45px;
-            height: 45px;
-            background: #333;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-        }
-
-        .social-links a:hover {
-            background: #8B4513;
-            transform: translateY(-3px);
-        }
-
-        .footer-section h4 {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-section h4::after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 2px;
-            background: #8B4513;
-            bottom: 0;
-            left: 0;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 1rem;
-        }
-
-        .footer-section ul li a {
-            color: #bbb;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            position: relative;
-        }
-
-        .footer-section ul li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            background: #8B4513;
-            bottom: -2px;
-            left: 0;
-            transition: width 0.3s;
-        }
-
-        .footer-section ul li a:hover {
-            color: #8B4513;
-            transform: translateX(5px);
-        }
-
-        .footer-section ul li a:hover::after {
-            width: 100%;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #333;
-            padding-top: 2rem;
-            text-align: center;
-            color: #bbb;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .hero-content h1 {
-                font-size: 3rem;
-            }
-
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 80px;
-                flex-direction: column;
-                background-color: white;
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 2rem 0;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                margin: 1.5rem 0;
-            }
-
-            .hero {
-                padding: 150px 0 80px;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-            }
-
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .services-filter {
-                justify-content: center;
-            }
-
-            .directory-search {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .search-box {
-                max-width: 100%;
-            }
-
-            .community-content {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .form-group {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 2.2rem;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .directory-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        /* Scroll to top button */
-        .scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #8B4513;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            opacity: 0;
-            visibility: hidden;
-            z-index: 999;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .scroll-top.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-top:hover {
-            background: rgba(139, 69, 19, 0.9);
-            transform: translateY(-3px);
-        }
-                /* About Us Section */
-        .about {
-            padding: 100px 0;
-            background: #fff;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-image {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .about-text h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-        }
-
-        .about-text h2::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background: #8B4513;
-            bottom: -10px;
-            left: 0;
-        }
-
-        .about-text p {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-        }
-
-        .about-values {
-            margin-top: 2rem;
-        }
-
-        .value-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-
-        .value-icon {
-            background: rgba(139, 69, 19, 0.1);
-            color: #8B4513;
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.5rem;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .value-text h4 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .value-text p {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 0;
-        }
-
-        @media (max-width: 768px) {
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .about-image {
-                order: -1;
-            }
-        }
-
-        .popup-overlay {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stays in place even when scrolling */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
-            z-index: 1000; /* Ensures it's on top of most content */
-            backdrop-filter: blur(3px); /* Optional: adds a blur effect to content behind */
-        }
-
-        /* Styles for the popup content box */
-        .popup-content {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stays in place even when scrolling */
-            top: 50%; /* Center vertically */
-            left: 50%; /* Center horizontally */
-            transform: translate(-50%, -50%) scale(0.9); /* Center and slightly shrink initially */
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Soft shadow */
-            max-width: 450px; /* Max width for responsiveness */
-            width: 90%; /* Responsive width */
-            text-align: center;
-            z-index: 1001; /* Higher than the overlay */
-            opacity: 0; /* Start with opacity 0 for animation */
-            transition: all 0.3s ease-out; /* Smooth transition for appearance */
-        }
-
-        /* Class to make the popup visible and animate it */
-        .popup-content.active {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1); /* Scale to normal size */
-        }
-
-        .popup-content h2 {
-            color: #8B4513; /* Earthy brown color from previous context */
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .popup-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            color: #555;
-        }
-
-        /* Style for the close button */
-        .popup-close-btn {
-            background-color: #8B4513; /* Earthy brown */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.2);
-        }
-
-        .popup-close-btn:hover {
-            background-color: #6a350f; /* Slightly darker brown on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-        }
-
-        /* Style for the button that triggers the popup (can be removed if only on page load) */
-        .open-popup-btn {
-            background-color: #8B4513;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
-        }
-
-        .open-popup-btn:hover {
-            background-color: #6a350f;
-            transform: translateY(-3px);
-        }
-
-        .popup-content img {
-            max-width: 150px; /* Adjust size as needed */
-            height: auto;
-            border-radius: 50%; /* Makes the image circular */
-            margin-bottom: 20px;
-            border: 3px solid #8B4513; /* A small border matching the theme */
-            object-fit: cover; /* Ensures the image covers the area without distortion */
-        }
-        .footer {
-            background: #222; /* Dark background */
-            color: #bbb; /* Light text color */
-            padding: 80px 0 30px;
-            font-size: 0.95rem;
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid columns */
-            gap: 3rem;
-            margin-bottom: 3rem;
-            padding-bottom: 3rem; /* Padding before the bottom line */
-            border-bottom: 1px solid #333; /* Separator line */
-        }
-
-        .footer-about .footer-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.8rem; /* Slightly larger for prominence */
-            font-weight: 700;
-            color: #8B4513; /* Earthy brown for the logo */
-            margin-bottom: 1.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .footer-about .footer-logo i {
-            margin-right: 10px;
-            font-size: 2.2rem; /* Larger icon */
-            color: #8B4513;
-        }
-
-        .footer-about p {
-            color: #bbb;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 1rem;
-            margin-top: 20px;
-        }
-
-        .footer-social a {
-            width: 45px;
-            height: 45px;
-            background: #333; /* Darker background for social icons */
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Subtle shadow */
-        }
-
-        .footer-social a:hover {
-            background: #8B4513; /* Earthy brown on hover */
-            transform: translateY(-3px) scale(1.05); /* Lift and slight scale effect */
-        }
-
-        .footer-title {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem; /* Slightly larger titles */
-            position: relative;
-            padding-bottom: 10px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            width: 50px; /* Longer underline */
-            height: 3px; /* Thicker underline */
-            background: #8B4513;
-            bottom: 0;
-            left: 0;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a,
-        .footer-contact-info a,
-        .footer-bottom-content a {
-            color: #bbb;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            background: #8B4513;
-            bottom: -2px;
-            left: 0;
-            transition: width 0.3s ease;
-        }
-
-        .footer-links a:hover,
-        .footer-contact-info a:hover,
-        .footer-bottom-content a:hover {
-            color: #8B4513;
-            transform: translateX(5px); /* Slide effect on hover */
-        }
-
-        .footer-links a:hover::after {
-            width: 100%;
-        }
-
-        .footer-contact-info {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-contact-info li {
-            display: flex;
-            align-items: flex-start; /* Align icon and text at the top */
-            margin-bottom: 1rem;
-            color: #bbb;
-        }
-
-        .footer-contact-info li i {
-            margin-right: 12px;
-            color: #8B4513;
-            font-size: 1.1rem;
-            flex-shrink: 0; /* Prevent icon from shrinking */
-            width: 20px; /* Fixed width for icons */
-            text-align: center;
-        }
-
-        /* Footer Bottom Section */
-        .footer-bottom {
-            padding-top: 2rem;
-            text-align: center;
-            color: #bbb;
-            font-size: 0.85rem; /* Smaller font for bottom text */
-        }
-
-        .footer-bottom-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 1rem; /* Space between elements when wrapped */
-        }
-
-        .footer-bottom-content .developer-info {
-            flex-grow: 1; /* Allows it to take available space */
-            text-align: left; /* Align to left by default */
-        }
-
-        .footer-bottom-content p {
-            margin: 0; /* Remove default paragraph margins */
-        }
-
-        /* Responsive Design for Footer */
-        @media (max-width: 768px) {
-            .footer-container {
-                grid-template-columns: 1fr; /* Stack columns on small screens */
-                text-align: center;
-            }
-
-            .footer-about .footer-logo,
-            .footer-title {
-                justify-content: center; /* Center logo and titles */
-            }
-
-            .footer-title::after {
-                left: 50%;
-                transform: translateX(-50%); /* Center underline */
-            }
-
-            .footer-social {
-                justify-content: center; /* Center social icons */
-            }
-
-            .footer-contact-info li {
-                justify-content: center; /* Center contact info */
-            }
-            .footer-contact-info li i {
-                margin-right: 8px; /* Adjust margin for smaller screens */
-            }
-
-            .footer-bottom-content {
-                flex-direction: column; /* Stack bottom content */
-                text-align: center;
-            }
-
-            .footer-bottom-content .developer-info {
-                text-align: center; /* Center developer info on small screens */
-            }
-    </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-lotus"></i>
-                <span>Jain Parivar </span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-
-
-                <li><a href="/contact/">Contact Us</a></li>
-                <li><a href="/about/">About Us</a></li>
-                <li><a href="/committeemembers/">Committee Members</a></li>
-                <li><a href="/jainammembers/">Jainam Members</a></li>
-                <li><a href="/login/" class="btn-login">Login</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+{% extends "base1.html" %}
+
+{% block title %}Home | Jain Parivar{% endblock %}
+{% load static %}
+
+
+{% block extra_head %}
+  <link rel="stylesheet" href="/media/assets/css/style.css">
+  <style>
+/* Sponsorship Popup Styles */
+.sponsor-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  z-index: 1000;
+  display: none;
+  border-top: 6px solid #8B4513;
+  animation: fadeIn 0.5s ease;
+}
+
+.sponsor-popup.show {
+  display: block;
+}
+
+.sponsor-popup h4 {
+  color: #8B4513;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.sponsor-popup p {
+  margin-bottom: 15px;
+}
+
+.sponsor-popup .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #8B4513;
+}
+
+.sponsor-popup .btn-brown {
+  background-color: #8B4513;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.sponsor-popup .btn-brown:hover {
+  background-color: #a0522d;
+}
+
+.sponsor-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #8B4513;
+  color: white;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sponsor-trigger i {
+  font-size: 1.4rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+    /* Entrepreneurs Section */
+    .entrepreneurs-section {
+      padding: 80px 0;
+      background: white;
+    }
+
+    .entrepreneur-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+
+    .entrepreneur-card:hover {
+      transform: translateY(-10px);
+    }
+
+    /* Events Section */
+    .events-section {
+      padding: 80px 0;
+      background: #f8f5f2;
+    }
+
+    .event-card {
+      border-left: 4px solid #8B4513;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    /* Community Spotlight */
+    .spotlight-section {
+      padding: 80px 0;
+      background: white;
+    }
+
+    .blog-card {
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      padding: 25px;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Common Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      color: #333;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 3px;
+      background: #8B4513;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .btn-brown {
+      background-color: #8B4513;
+      color: white;
+    }
+
+    .text-brown {
+      color: #8B4513;
+    }
+
+    .bg-light-brown {
+      background-color: #f5e9e0;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .entrepreneurs-section,
+      .events-section,
+      .spotlight-section {
+        padding: 60px 0;
+      }
+    }
+    
+  </style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="home" class="hero-section d-flex align-items-center">
+    <div class="container text-center">
+        <h5 class="text-white display-6 fw-bold mb-4 font-playfair">Sri Vardhaman Sthanakwasi Jain Shravak Sangh Hubli</h5>
+        <p class="text-white lead mb-5 mx-auto" style="max-width: 700px;font-weight:600">
+            An Initiative by Jainam
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="#" class="btn btn-brown btn-lg rounded-pill px-4">Join Community</a>
         </div>
-    </nav>
+    </div>
+</section>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1>Empowering the Jain Parivar Community</h1>
-                <p>Connect with trusted Jain entrepreneurs, showcase your services, and grow your business within our ethical network built on shared values and mutual prosperity.</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="window.location.href='/register/'">Join Community</button>
-                    <!-- <button class="btn-secondary">Explore </button> -->
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-            <div class="container">
-                <div class="footer-container">
-                    <div class="footer-about">
-                        <div class="footer-logo">
-                            <i class="fas fa-lotus"></i> <!-- Replaced img with icon -->
-                            Jain Parivar Hub
-                        </div>
-                        <p>Connecting the global Jain business community to foster growth, collaboration, and success while upholding Jain values.</p>
-                        <div class="footer-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="footer-links-section">
-                        <h3 class="footer-title">Quick Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#about">About Us</a></li>
-
-                            <li><a href="#community">Community Hub</a></li> <!-- Changed from #events to #community -->
-                            <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-contact">
-                        <h3 class="footer-title">Contact Info</h3>
-                        <ul class="footer-contact-info">
-                            <li>
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Jainam, Stanakvasi Jain Sangh Kanchgar Galli Hubballi -580020</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone"></i>
-                                <span>+91 22 1234 5678</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-envelope"></i>
-                                <span>info@jainamparivar.org</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-clock"></i>
-                                <span>Mon-Fri: 9AM - 6PM</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <div class="footer-bottom-content">
-                        <p class="developer-info">Designed & Developed by <a href="haegl.in" class="footer-link">Haegl Technologies Pvt Ltd</a> </p>
-                        <p>&copy; <span id="year"></span> Jainam Hubli. All Rights Reserved. | <a href="#" class="footer-link">Privacy Policy</a> | <a href="#" class="footer-link">Terms of Service</a></p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-    <div class="scroll-top">
-        <i class="fas fa-arrow-up"></i>
+<!-- Successful Entrepreneurs Section -->
+<section class="entrepreneurs-section py-5">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Successful Entrepreneurs</h2>
+      <p class="lead">Meet the inspiring business leaders from our community</p>
     </div>
 
-    <div id="popupOverlay" class="popup-overlay" onclick="closePopup()"></div>
+    <div class="row g-4">
+      <!-- Entrepreneur 1 -->
+       {% for e in entrepreneurs %}
+      <div class="col-md-6 col-lg-3">
+        <div class="entrepreneur-card p-4 text-center h-100">
+        {% if e.profile_picture %}
+          <img src="{{ e.profile_picture.url }}"
+               alt="Entrepreneur"
+               class="img-fluid mb-3 w-100"
+               style="height: 250px; object-fit: cover; border-radius: 8px;">
+           {% else %}
+            <img src="https://img.freepik.com/premium-photo/young-indian-businessman-suit-tie-standing-office-ai-generated_843560-800.jpg"
+               alt="Entrepreneur"
+               class="img-fluid mb-3 w-100"
+               style="height: 250px; object-fit: cover; border-radius: 8px;">
+            {% endif %}
+          <h4 class="mb-2" style="font-size: 1.2rem;">{{ e.name }}</h4>
+          <p class="text-brown fw-bold mb-3">{{ e.company_name }}</p>
+          <a href="#" class="btn btn-outline-brown">View Profile</a>
+        </div>
+      </div>
+    {% endfor %}
 
-    <!-- Popup Content -->
-    <div id="myPopup" class="popup-content">
-        <img src="https://media.licdn.com/dms/image/v2/C4D03AQGKfZb4z0NO4w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1656765413996?e=2147483647&v=beta&t=HSMZVu3WUk7_5l8ttHCl_sDULLFM9OMwVSXMTeNSOy0" alt="Sponsor Photo">
-        <h2>Platform Sponsored By:</h2>
-        <p><strong>Innovate Solutions Inc.</strong></p>
-        <p>Innovate Solutions Inc. is a leading technology firm dedicated to fostering digital transformation and community growth. They specialize in secure, scalable, and user-friendly platforms.</p>
-        <p>Visit their website: <a href="https://www.innovatesolutions.com" target="_blank" style="color: #8B4513; text-decoration: underline;">innovatesolutions.com</a></p>
-        <button class="popup-close-btn" onclick="closePopup()">Close</button>
     </div>
 
-    <script>
-        // Get references to the popup and overlay elements
-        const myPopup = document.getElementById('myPopup');
-        const popupOverlay = document.getElementById('popupOverlay');
-
-        /**
-         * Opens the popup by making it visible and applying an active class for animation.
-         */
-        function openPopup() {
-            myPopup.style.display = 'block'; // Make popup block-level to be visible
-            popupOverlay.style.display = 'block'; // Make overlay visible
-            // Use a small delay to allow display property to take effect before transition
-            setTimeout(() => {
-                myPopup.classList.add('active');
-            }, 10);
-        }
-
-        /**
-         * Closes the popup by removing the active class and then hiding it.
-         */
-        function closePopup() {
-            myPopup.classList.remove('active'); // Remove active class to trigger reverse animation
-            // Wait for the animation to complete before hiding the elements completely
-            setTimeout(() => {
-                myPopup.style.display = 'none';
-                popupOverlay.style.display = 'none';
-            }, 300); // This delay should match the CSS transition duration
-        }
-
-        // Call openPopup() when the DOM content is fully loaded
-        document.addEventListener('DOMContentLoaded', openPopup);
-
-        // Optional: Close popup if the Escape key is pressed
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && myPopup.classList.contains('active')) {
-                closePopup();
-            }
-        });
-    </script>
+    <div class="text-center mt-5">
+      <a href="#" class="btn btn-brown btn-lg">View All Entrepreneurs</a>
+    </div>
+  </div>
+</section>
 
 
-    <script>
-        // Sample data for services and businesses
-        const servicesData = [
-            {
-                id: 1,
-                title: "Financial Consulting",
-                provider: "Rajesh Jain & Co.",
-                category: "finance",
-                description: "Expert financial planning and investment advisory services tailored for Jain businesses, focusing on ethical investments and wealth management.",
-                price: "₹5,000/month",
-                icon: "fas fa-chart-line",
-            },
-            {
-                id: 2,
-                title: "Premium Textile Manufacturing",
-                provider: "Sunita Jain Textiles",
-                category: "textile",
-                description: "High-quality textile manufacturing with sustainable practices and competitive pricing. Specializing in ahimsa silk and organic cotton fabrics.",
-                price: "₹200/meter",
-                icon: "fas fa-tshirt",
-            },
-            {
-                id: 3,
-                title: "Custom Jewelry Design",
-                provider: "Amit Jain Jewelers",
-                category: "jewelry",
-                description: "Exquisite custom jewelry design and manufacturing with traditional and modern techniques, using ethically sourced gemstones and metals.",
-                price: "₹15,000+",
-                icon: "fas fa-gem",
-            },
-            {
-                id: 4,
-                title: "Business Strategy Consulting",
-                provider: "Priya Jain Consultants",
-                category: "consulting",
-                description: "Strategic business consulting to help scale your operations while maintaining ethical business practices and Jain values.",
-                price: "₹10,000/session",
-                icon: "fas fa-lightbulb",
-            },
-            {
-                id: 5,
-                title: "Web Development Services",
-                provider: "TechJain Solutions",
-                category: "technology",
-                description: "Modern web development services including e-commerce and business websites, with a focus on clean, minimalist designs.",
-                price: "₹25,000+",
-                icon: "fas fa-code",
-            },
-            {
-                id: 6,
-                title: "Investment Banking",
-                provider: "Jain Capital Partners",
-                category: "finance",
-                description: "Ethical investment banking services for mergers, acquisitions, and capital raising that align with Jain principles.",
-                price: "₹50,000+",
-                icon: "fas fa-university",
-            },
-            {
-                id: 7,
-                title: "Accounting Services",
-                provider: "Jain & Associates",
-                category: "finance",
-                description: "Comprehensive accounting and bookkeeping services for businesses of all sizes, with transparent pricing.",
-                price: "₹8,000/month",
-                icon: "fas fa-calculator",
-            },
-            {
-                id: 8,
-                title: "Legal Consulting",
-                provider: "Jain Legal Solutions",
-                category: "consulting",
-                description: "Expert legal advice for business formation, contracts, and compliance matters from a Jain perspective.",
-                price: "₹12,000/session",
-                icon: "fas fa-balance-scale",
-            }
-        ];
+<!-- Upcoming Events Section -->
+<section class="events-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Upcoming Events</h2>
+      <p class="lead">Participate in our community gatherings and business networking events</p>
+    </div>
 
-        const businessesData = [
-            {
-                id: 1,
-                name: "Jain Enterprises",
-                category: "Manufacturing",
-                description: "Leading manufacturer of industrial equipment with 25+ years of experience, committed to ethical production practices.",
-                city: "mumbai",
-                phone: "+91 98765 43210",
-                email: "info@jainenterprises.com",
-                website: "jainenterprises.com",
-                logo: "JE",
-            },
-            {
-                id: 2,
-                name: "Golden Textiles",
-                category: "Textile",
-                description: "Premium textile manufacturer specializing in organic and sustainable fabrics, with a focus on traditional Jain weaving techniques.",
-                city: "delhi",
-                phone: "+91 98765 43211",
-                email: "contact@goldentextiles.com",
-                website: "goldentextiles.com",
-                logo: "GT",
-            },
-            {
-                id: 3,
-                name: "Jain Financial Services",
-                category: "Finance",
-                description: "Comprehensive financial services including loans, investments, and insurance, all guided by Jain financial principles.",
-                city: "bangalore",
-                phone: "+91 98765 43212",
-                email: "help@jainfinancial.com",
-                website: "jainfinancial.com",
-                logo: "JFS",
-            },
-            {
-                id: 4,
-                name: "Diamond Palace",
-                category: "Jewelry",
-                description: "Exquisite diamond and gold jewelry with traditional craftsmanship, using ethically sourced materials.",
-                city: "pune",
-                phone: "+91 98765 43213",
-                email: "sales@diamondpalace.com",
-                website: "diamondpalace.com",
-                logo: "DP",
-            },
-            {
-                id: 5,
-                name: "TechVision Solutions",
-                category: "Technology",
-                description: "Innovative IT solutions and software development for modern businesses, with a commitment to ethical technology practices.",
-                city: "ahmedabad",
-                phone: "+91 98765 43214",
-                email: "info@techvision.com",
-                website: "techvision.com",
-                logo: "TV",
-            },
-            {
-                id: 6,
-                name: "Jain Consultancy Group",
-                category: "Consulting",
-                description: "Strategic business consulting and management advisory services that align with Jain business ethics and values.",
-                city: "mumbai",
-                phone: "+91 98765 43215",
-                email: "consult@jaincg.com",
-                website: "jaincg.com",
-                logo: "JCG",
-            },
-            {
-                id: 7,
-                name: "Pure Veg Restaurants",
-                category: "Hospitality",
-                description: "Chain of pure vegetarian restaurants serving Jain-friendly cuisine with strict adherence to dietary principles.",
-                city: "delhi",
-                phone: "+91 98765 43216",
-                email: "info@pureveg.com",
-                website: "pureveg.com",
-                logo: "PV",
-            },
-            {
-                id: 8,
-                name: "GreenBuild Constructions",
-                category: "Construction",
-                description: "Sustainable construction company specializing in eco-friendly buildings that minimize environmental impact.",
-                city: "bangalore",
-                phone: "+91 98765 43217",
-                email: "contact@greenbuild.com",
-                website: "greenbuild.com",
-                logo: "GB",
-            }
-        ];
+    <div class="row g-4">
+      <!-- Events -->
+       {% for event in events %}
+      <div class="col-md-6 col-lg-4">
+        <div class="event-card p-4 bg-white h-100">
+          <div class="d-flex mb-3">
+            <div class="event-date me-3 p-2 bg-brown text-white rounded">
+              <div class="day">{{ event.date|date:"d" }}</div>
+              <div class="month">{{ event.date|date:"F" }}</div>
+            </div>
+            <div>
+              <span class="badge bg-brown text-white mb-2">Community Events</span>
+              <h3 class="h5">{{ event.title }}</h3>
+            </div>
+          </div>
+          <p><i class="fas fa-map-marker-alt text-brown me-2"></i>{{ event.location|default:"N/A" }}</p>
+          <p><i class="fas fa-clock text-brown me-2"></i>{{ event.time }}</p>
+          <p> {{ event.description|default:"No description" }}</p>
+          
+        </div>
+      </div>
+        {% endfor %}
 
-        // DOM Elements
-        const hamburger = document.querySelector(".hamburger");
-        const navMenu = document.querySelector(".nav-menu");
-        const servicesGrid = document.getElementById("servicesGrid");
-        const directoryGrid = document.getElementById("directoryGrid");
-        const filterButtons = document.querySelectorAll(".filter-btn");
-        const businessSearch = document.getElementById("businessSearch");
-        const cityFilter = document.getElementById("cityFilter");
-        const contactForm = document.getElementById("contactForm");
-        const navbar = document.querySelector(".navbar");
-        const scrollTopBtn = document.querySelector(".scroll-top");
-        const sections = document.querySelectorAll("section");
+    </div>
+  </div>
+</section>
 
-        // Initialize the website
-        document.addEventListener("DOMContentLoaded", () => {
-            renderServices(servicesData);
-            renderBusinesses(businessesData);
-            setupEventListeners();
-            setupSmoothScrolling();
-            setupAnimations();
-            setupScrollTopButton();
-        });
+<!-- Community Spotlight Section - Now Blog Style -->
+<section class="spotlight-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Community Spotlight</h2>
+      <p class="lead">Celebrating inspiring stories from our community</p>
+    </div>
 
-        // Mobile menu toggle
-        function setupEventListeners() {
-            hamburger.addEventListener("click", () => {
-                hamburger.classList.toggle("active");
-                navMenu.classList.toggle("active");
-            });
+    <div class="row g-4">
+      <!-- Blog 1 -->
+      <div class="col-md-4">
+        <div class="blog-card">
+          <span class="badge bg-light-brown text-brown mb-3">Success Story</span>
+          <h3>From Small Shop to National Chain</h3>
+          <p class="text-brown fw-bold">Shree Rajesh Jain, RJ Textiles</p>
+          <p class="mb-4">How a traditional family business transformed into a ₹50 crore enterprise while maintaining Jain values of ethical business practices and community support.</p>
+          <a href="#" class="btn btn-sm btn-brown">Read Full Story</a>
+        </div>
+      </div>
 
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll(".nav-menu a").forEach((link) => {
-                link.addEventListener("click", () => {
-                    hamburger.classList.remove("active");
-                    navMenu.classList.remove("active");
-                });
-            });
+      <!-- Blog 2 -->
+      <div class="col-md-4">
+        <div class="blog-card">
+          <span class="badge bg-light-brown text-brown mb-3">Innovation</span>
+          <h3>Tech Startup Supporting Jain Temples</h3>
+          <p class="text-brown fw-bold">JainTech Solutions</p>
+          <p class="mb-4">Developed an app helping 200+ temples streamline donations and volunteer management while preserving traditional values through technology.</p>
+          <a href="#" class="btn btn-sm btn-brown">Learn More</a>
+        </div>
+      </div>
 
-            // Service filter buttons
-            filterButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const category = button.getAttribute("data-category");
-                    filterServices(category);
+      <!-- Blog 3 -->
+      <div class="col-md-4">
+        <div class="blog-card">
+          <span class="badge bg-light-brown text-brown mb-3">Education</span>
+          <h3>Scholarship Program for Jain Students</h3>
+          <p class="text-brown fw-bold">Jain Vidya Foundation</p>
+          <p class="mb-4">Supporting 150+ Jain students annually with scholarships and mentorship programs to help them excel in professional fields.</p>
+          <a href="#" class="btn btn-sm btn-brown">Read More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Sponsorship Popup -->
+<div class="sponsor-popup" id="sponsorPopup">
+  <button class="close-btn" onclick="closeSponsorPopup()">&times;</button>
+  <h4>Website Sponsor</h4>
+  <p>This website is proudly sponsored by:</p>
 
-                    // Update active button
-                    filterButtons.forEach((btn) => btn.classList.remove("active"));
-                    button.classList.add("active");
-                });
-            });
+  <div class="d-flex align-items-center mb-3" style="gap: 15px;">
+    <img src="/media/assets/logo/sponsor.jpeg" alt="Sponsor Name"
+         class="rounded-circle"
+         style="width: 60px; height: 60px; object-fit: cover;">
+    <div>
+      <h5 class="mb-0">Vinay Nakul</h5>
+      <small class="text-muted">VN Technologies</small>
+    </div>
+  </div>
 
-            // Business search and filter
-            businessSearch.addEventListener("input", filterBusinesses);
-            cityFilter.addEventListener("change", filterBusinesses);
+  <p class="small">
+    "Supporting our Jain community through technology and innovation."
+  </p>
+  <!-- <a href="#" class="btn btn-sm btn-brown">Learn More</a> -->
+</div>
 
-            // Contact form submission
-            contactForm.addEventListener("submit", handleContactForm);
+<!-- Trigger Button -->
+<div class="sponsor-trigger" onclick="toggleSponsorPopup()">
+  <i class="fas fa-hand-holding-heart"></i>
+</div>
 
-            // Hero buttons
-            document.querySelector(".hero-buttons .btn-primary").addEventListener("click", () => {
-                document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
-            });
+{% endblock %}
 
-            document.querySelector(".hero-buttons .btn-secondary").addEventListener("click", () => {
-                document.getElementById("services").scrollIntoView({ behavior: "smooth" });
-            });
+{% block extra_js %}
+<script>
+  // Sponsorship Popup Functionality
+  function toggleSponsorPopup() {
+    const popup = document.getElementById('sponsorPopup');
+    popup.classList.toggle('show');
+  }
 
-            // Navbar scroll effect
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add("scrolled");
-                } else {
-                    navbar.classList.remove("scrolled");
-                }
+  function closeSponsorPopup() {
+    document.getElementById('sponsorPopup').classList.remove('show');
+  }
 
-                // Show/hide scroll to top button
-                if (window.scrollY > 300) {
-                    scrollTopBtn.classList.add("active");
-                } else {
-                    scrollTopBtn.classList.remove("active");
-                }
-            });
+  // Auto-show popup after 5 seconds
+  setTimeout(() => {
+    toggleSponsorPopup();
+  }, 1000);
 
-            // Scroll to top button
-            scrollTopBtn.addEventListener("click", () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
-            });
-        }
-
-        // Render services
-        function renderServices(services) {
-            servicesGrid.innerHTML = services
-                .map(
-                    (service) => `
-                        <div class="service-card animate" data-category="${service.category}">
-                            <div class="service-header">
-                                <div class="service-icon">
-                                    <i class="${service.icon}"></i>
-                                </div>
-                                <div class="service-info">
-                                    <h3>${service.title}</h3>
-                                    <p>by ${service.provider}</p>
-                                </div>
-                            </div>
-                            <div class="service-description">
-                                ${service.description}
-                            </div>
-                            <div class="service-footer">
-                                <div class="service-price">${service.price}</div>
-                                <button class="service-btn" onclick="contactService('${service.provider}')">Contact</button>
-                            </div>
-                        </div>
-                    `
-                )
-                .join("");
-        }
-
-        // Filter services by category
-        function filterServices(category) {
-            const serviceCards = document.querySelectorAll(".service-card");
-
-            serviceCards.forEach((card) => {
-                if (category === "all" || card.getAttribute("data-category") === category) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-
-        // Render businesses
-        function renderBusinesses(businesses) {
-            directoryGrid.innerHTML = businesses
-                .map(
-                    (business) => `
-                        <div class="business-card animate" data-city="${business.city}" data-name="${business.name.toLowerCase()}">
-                            <div class="business-header">
-                                <div class="business-logo">${business.logo}</div>
-                                <div class="business-info">
-                                    <h3>${business.name}</h3>
-                                    <span class="business-category">${business.category}</span>
-                                </div>
-                            </div>
-                            <div class="business-description">
-                                ${business.description}
-                            </div>
-                            <div class="business-details">
-                                <div class="business-detail">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>${business.city.charAt(0).toUpperCase() + business.city.slice(1)}</span>
-                                </div>
-                                <div class="business-detail">
-                                    <i class="fas fa-phone"></i>
-                                    <span>${business.phone}</span>
-                                </div>
-                                <div class="business-detail">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>${business.email}</span>
-                                </div>
-                                <div class="business-detail">
-                                    <i class="fas fa-globe"></i>
-                                    <span>${business.website}</span>
-                                </div>
-                            </div>
-                            <div class="business-actions">
-                                <button class="contact-btn" onclick="contactBusiness('${business.name}')">Contact</button>
-                                <button class="visit-btn" onclick="visitWebsite('${business.website}')">Visit Website</button>
-                            </div>
-                        </div>
-                    `
-                )
-                .join("");
-        }
-
-        // Filter businesses
-        function filterBusinesses() {
-            const searchTerm = businessSearch.value.toLowerCase();
-            const selectedCity = cityFilter.value;
-            const businessCards = document.querySelectorAll(".business-card");
-
-            businessCards.forEach((card) => {
-                const businessName = card.getAttribute("data-name");
-                const businessCity = card.getAttribute("data-city");
-
-                const matchesSearch = businessName.includes(searchTerm);
-                const matchesCity = !selectedCity || businessCity === selectedCity;
-
-                if (matchesSearch && matchesCity) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-
-        // Setup animations
-        function setupAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("animate");
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
-            });
-
-            document.querySelectorAll(".service-card, .business-card, .news-item, .event-item, .section-header, .contact-item").forEach((el) => {
-                observer.observe(el);
-            });
-        }
-
-        // Setup scroll to top button
-        function setupScrollTopButton() {
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 300) {
-                    scrollTopBtn.classList.add("active");
-                } else {
-                    scrollTopBtn.classList.remove("active");
-                }
-            });
-        }
-
-        // Smooth scrolling for navigation links
-        function setupSmoothScrolling() {
-            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                anchor.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute("href"));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                        });
-                    }
-                });
-            });
-        }
-
-        // Contact service provider
-        function contactService(provider) {
-            alert(`Contacting ${provider}... This would open a contact modal or redirect to a contact page.`);
-        }
-
-        // Contact business
-        function contactBusiness(businessName) {
-            alert(`Contacting ${businessName}... This would open a contact modal or redirect to a contact page.`);
-        }
-
-        // Visit website
-        function visitWebsite(website) {
-            window.open(`https://${website}`, "_blank");
-        }
-
-        // Handle contact form submission
-        function handleContactForm(e) {
-            e.preventDefault();
-
-            // Get form data
-            const formData = new FormData(contactForm);
-
-            // Simulate form submission
-            alert("Thank you for your message! We will get back to you soon.");
-            contactForm.reset();
-        }
-    </script>
-</body>
-</html>
+  // Close when clicking outside
+  document.addEventListener('click', function(event) {
+    const popup = document.getElementById('sponsorPopup');
+    const trigger = document.querySelector('.sponsor-trigger');
+    
+    if (!popup.contains(event.target) && event.target !== trigger && !trigger.contains(event.target)) {
+      closeSponsorPopup();
+    }
+  });
+</script>
+{% endblock %}

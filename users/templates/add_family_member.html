@@ -1,0 +1,30 @@
+
+<h2>Add Family Member for {{ main_user.first_name }} {{ main_user.last_name }}</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <label>Name: <input type="text" name="name" required></label><br>
+    <label>Relationship: <input type="text" name="relationship" required></label><br>
+    <label>Birthday: <input type="date" name="birthday"></label><br>
+    <label>Gender:
+        <select name="Gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </label><br>
+    <label>Phone: <input type="text" name="phone" required></label><br>
+    <label>WhatsApp: <input type="text" name="whatsappNumber"></label><br>
+    <label>Email: <input type="email" name="email"></label><br>
+    <label>Blood Group: <input type="text" name="blood_group"></label><br>
+    <label>Address: <textarea name="address"></textarea></label><br>
+    <label>Notes: <textarea name="notes"></textarea></label><br>
+
+    <button type="submit">Add Member</button>
+</form>

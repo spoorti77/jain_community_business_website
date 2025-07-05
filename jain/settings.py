@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -137,3 +138,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.NewUser'  # Replace 'yourapp' with the actual app name
+
+# settings.py
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY")

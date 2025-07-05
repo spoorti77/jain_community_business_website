@@ -1247,17 +1247,17 @@
                             <td>
                                 <div class="actions">
                                     <!-- View Button -->
-                        <!-- <button class="btn-view" onclick="openViewEventModal('{{ event.id }}')" title="View">
+                        <button class="btn-view" onclick="openViewEventModal('{{ event.id }}')" title="View">
                             <i class="fas fa-eye"></i>
-                        </button> -->
+                        </button>
 
                                     <!-- Delete Button -->
-                                    <!-- <form action="{% url 'delete_event' event.id %}" method="POST" style="display:inline;">
+                                    <form action="{% url 'delete_event' event.id %}" method="POST" style="display:inline;">
                                         {% csrf_token %}
                                         <button type="submit" class="btn-view" title="Delete">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
-                                    </form> -->
+                                    </form>
 
                                     {% if event.id %}
                                         <form action="{% url 'invite_member' event.id %}" method="POST" style="display:inline;">
@@ -1601,16 +1601,27 @@ function closeModal(modalId) {
             </form>
         </div>
     </div>
+    <script>
+    function openAddEventModal() {
+    document.getElementById("add-event-modal").style.display = "block";
+}
 
-    <!-- Edit Event Modal -->
+function closeModal() {
+    document.getElementById("add-event-modal").style.display = "none";
+}
+
+</script>
+
+   <!-- Edit Event Modal -->
     <div class="modal-overlay" id="edit-event-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Edit Event</h2>
-                <button class="modal-close" onclick="closeModal('edit-event-modal')">&times;</button>
+                <button class="modal-close" onclick="closeEditEventModal()">&times;</button>
             </div>
 
-            <form class="modal-form" id="edit-event-form">
+            <form class="modal-form" id="edit-event-form" action="#" method="POST">
+                {% csrf_token %}    
                 <input type="hidden" name="id">
                 
                 <div class="form-group">
@@ -1648,7 +1659,7 @@ function closeModal(modalId) {
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal('edit-event-modal')">
+                    <button type="button" class="btn-secondary" onclick="closeEditEventModal()">
                         Cancel
                     </button>
                     <button type="submit" class="btn-primary">
@@ -1658,6 +1669,49 @@ function closeModal(modalId) {
             </form>
         </div>
     </div>
+  
+<script>
+function openEditEventModal(id, title, date, time, location, description) {
+    const modal = document.getElementById("edit-event-modal");
+    modal.style.display = "block";
+
+    const form = document.getElementById("edit-event-form");
+    form.querySelector("input[name='id']").value = id;
+    form.querySelector("input[name='title']").value = title;
+    form.querySelector("input[name='date']").value = date;
+    form.querySelector("input[name='time']").value = time;
+    form.querySelector("input[name='location']").value = location;
+    form.querySelector("textarea[name='description']").value = description;
+}
+
+document.getElementById("edit-event-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("{% url 'update_event' %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-CSRFToken": formData.get('csrfmiddlewaretoken')
+        }
+    }).then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+            alert("Event updated successfully");
+            location.reload();
+        } else {
+            alert("Failed to update event.");
+        }
+    });
+});
+</script>
+<script>
+            function closeEditEventModal() {
+            document.getElementById('edit-event-modal').style.display = 'none';
+        }
+</script>
+
 
 <!-- View Event Modal -->
 <div class="modal-overlay" id="view-event-modal" style="display:none;">
@@ -1667,36 +1721,48 @@ function closeModal(modalId) {
             <button class="modal-close" onclick="closeViewEventModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <p><strong>Date:</strong> <span id="event-date"></span></p>
-            <p><strong>Time:</strong> <span id="event-time"></span></p>
-            <p><strong>Location:</strong> <span id="event-location"></span></p>
-            <p><strong>Description:</strong> <span id="event-description"></span></p>
+            <div class="event-detail">
+                <label>Date:</label>
+                <span id="event-date"></span>
+            </div>
+            <div class="event-detail">
+                <label>Time:</label>
+                <span id="event-time"></span>
+            </div>
+            <div class="event-detail">
+                <label>Location:</label>
+                <span id="event-location"></span>
+            </div>
+            <div class="event-detail">
+                <label>Description:</label>
+                <span id="event-description"></span>
+            </div>
         </div>
     </div>
 </div>
-<script>
-    function openViewEventModal(eventId) {
-        fetch(`/get_event_details/${eventId}/`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('event-title').innerText = data.title || 'No Title';
-            document.getElementById('event-date').innerText = data.date || 'N/A';
-            document.getElementById('event-time').innerText = data.time || 'N/A';
-            document.getElementById('event-location').innerText = data.location || 'N/A';
-            document.getElementById('event-description').innerText = data.description || 'No description';
-            document.getElementById('view-event-modal').style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error fetching event details:', error);
-            alert('Failed to load event details');
-        });
-    }
 
-    function closeViewEventModal() {
-        document.getElementById('view-event-modal').style.display = 'none';
-    }
-</script>
+    <script>
+        function openViewEventModal(eventId) {
+            fetch(`/get_event_details/${eventId}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('event-title').innerText = data.title || 'No Title';
+                document.getElementById('event-date').innerText = data.date || 'N/A';
+                document.getElementById('event-time').innerText = data.time || 'N/A';
+                document.getElementById('event-location').innerText = data.location || 'N/A';
+                document.getElementById('event-description').innerText = data.description || 'No description';
+                document.getElementById('view-event-modal').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching event details:', error);
+                alert('Failed to load event details');
+            });
+        }
 
+        function closeViewEventModal() {
+            document.getElementById('view-event-modal').style.display = 'none';
+        }
+    </script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">

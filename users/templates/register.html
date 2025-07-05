@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Your Business - Jain Business Hub</title>
+    <title>Register Your Business - Jain Connect</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
         <!-- jQuery -->
@@ -467,7 +467,7 @@
                         <path d="M5 21V7l8-4v18"/>
                         <path d="M19 21V11l-6-4"/>
                     </svg>
-                    <span class="logo">Jain Business Hub</span>
+                    <span class="logo">Jain Connect</span>
                 </div>
                 <h2 class="benefits-title">Join Our Network</h2>
                 <p class="benefits-description">Connect with like-minded professionals who share your values</p>
@@ -611,7 +611,7 @@
         <div class="form-row cols-2">
             <div class="form-group">
                 <label class="form-label " for="email">Email Address</label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="Enter email address" required>
+                <input type="email" id="email" name="email" class="form-input" placeholder="Enter email address" >
             </div>
             <div class="form-group">
                 <label class="form-label required" for="phone">Phone Number</label>
@@ -830,32 +830,6 @@
     <div class="login-link">
         Already have an account? <a href="/login/">Log in</a>
     </div>
-    
-<script>
-$(function () {
-  let cityData = [];
-
-  $.getJSON("/static/data/cities.json", function (data) {
-    cityData = data;
-    const states = [...new Set(data.map(item => item.state))].sort();
-    states.forEach(state => {
-      $('#state').append(new Option(state, state));
-    });
-  });
-
-  $('#state').on('change', function () {
-    const state = this.value;
-    const cities = cityData
-      .filter(city => city.state === state)
-      .map(city => city.name);
-
-    $('#current').autocomplete({
-      source: [...new Set(cities)].sort()
-    });
-  });
-});
-</script>
-
 </form>
 
                 </div>

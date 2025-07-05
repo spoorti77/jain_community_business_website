@@ -1,3 +1,4 @@
+{% load static %}
 <!-- Back Button -->
 <button class="back-button" onclick="window.history.back()">← Back</button>
 
@@ -13,10 +14,14 @@
     {% if invited_members %}
         {% for member in invited_members %}
             <div class="invited-card">
+                <img src="/media/assets/logo/jainam.png" class="card-logo" alt="Logo"> 
                 <h3 class="invited-name">{{ member.first_name }} {{ member.last_name }}</h3>
-                <p class="invited-detail">{{ member.email }}</p>
-                <p class="invited-detail">{{ member.phone_number }}</p>
                 <p class="invited-detail">{{ member.residential_address }}</p>
+                
+                <p class="invited-detail">{{ member.phone_number }}</p>
+                <p class="invited-detail">{{ member.email }}</p>
+
+                <div class="jainam-text">Jainam Hubli</div>
             </div>
         {% endfor %}
     {% else %}
@@ -26,6 +31,15 @@
 
 <!-- Styling -->
 <style>
+    /* Bottom-left text */
+.jainam-text {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    font-weight: bold;
+    color: #8B4513;
+    font-size: 14px;
+}
 /* Back Button */
 .back-button {
     background-color: #8B4513;
@@ -115,6 +129,18 @@
     text-align: center;
     width: 100%;
 }
+.card-logo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 40px;
+    width: auto;
+}
+
+.invited-card {
+    position: relative; /* Important to position the logo inside the card */
+}
+
 </style>
 
 <!-- JavaScript for PDF Download -->

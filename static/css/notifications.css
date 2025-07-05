@@ -1,0 +1,101 @@
+
+    .notification-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 380px; /* Increased width */
+    max-height: 500px; /* Allow for more notifications */
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 15px;
+}
+
+.notification-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item i {
+    margin-top: 4px;
+    color: #7e4444;
+}
+
+.announcement-item strong {
+    font-size: 15px;
+    color: #333;
+}
+
+.announcement-msg {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.notification-item small {
+    font-size: 12px;
+    color: #888;
+}
+
+.notification-item.empty {
+    text-align: center;
+    padding: 15px 0;
+    color: #aaa;
+}
+
+.invite-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.invite-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-left: 5px solid #06A3DA;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.invite-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.invite-card p {
+    margin: 6px 0;
+    color: #555;
+}

@@ -1134,34 +1134,52 @@
             <div class="sidebar-header">
                 <div class="sidebar-logo">
                     <i class="fas fa-users logo-icon"></i>
-                    <span>Family Hub</span>
+                    <span>Jain Parivar</span>
                 </div>
             </div>
 
-            <nav class="sidebar-nav">
-                <button class="nav-item active" onclick="switchTab('dashboard')" data-tab="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </button>
+            
+           <nav class="sidebar-nav">
+    <button class="nav-item {% if request.path == '/admin_dashboard/' %}active{% endif %}" onclick="window.location.href='/admin_dashboard/'">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+    </button>
 
-                <button class="nav-item" onclick="switchTab('family')" data-tab="family">
-                    <i class="fas fa-users"></i>
-                    <span>Manage Family</span>
-                </button>
+    <button class="nav-item {% if request.path == '/request-list/' %}active{% endif %}" onclick="window.location.href='/request-list/'">
+        <i class="fas fa-users"></i>
+        <span>Manage Users</span>
+    </button>
 
-                <button class="nav-item" onclick="window.location.href='/event-list/'" data-tab="events">
-                    <i class="fas fa-calendar"></i>
-                    <span>Manage Events</span>
-                </button>
-                 <button class="nav-item"onclick="window.location.href='/search-people/'" data-tab="settings">
-                    <i class="fas fa-user-group"></i>
-                    <span>Search People</span>   
-                </button>
-                <button class="nav-item" onclick="window.location.href='/logout/'" data-tab="logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>  
-                </button>
-            </nav>
+    <button class="nav-item {% if request.path == '/event-list-admin/' %}active{% endif %}" onclick="window.location.href='/event-list-admin/'">
+        <i class="fas fa-briefcase"></i>
+        <span>Add Events</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/add-member-admin/' %}active{% endif %}" onclick="window.location.href='/add-member-admin/'">
+        <i class="fas fa-user"></i>
+        <span>Add Members</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/entrepreneurs/' %}active{% endif %}" onclick="window.location.href='/entrepreneurs/'">
+        <i class="fas fa-user-tie"></i>
+        <span>Add Entrepreneurs</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/review_address_requests/' %}active{% endif %}" onclick="window.location.href='/review_address_requests/'">
+        <i class="fas fa-calendar"></i>
+        <span>Address Change Requests</span>
+    </button>
+
+    <button class="nav-item {% if request.path == '/manage_annoucements/' %}active{% endif %}" onclick="window.location.href='/manage_annoucements/'">
+        <i class="fas fa-bullhorn"></i>
+        <span>Manage Announcements</span>
+    </button>
+
+    <button class="nav-item" onclick="window.location.href='/logout/'">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>  
+    </button>
+</nav>
         </aside>
 
         <!-- Main Content -->
@@ -1172,7 +1190,7 @@
             <div id="family-tab" class="tab-content active">
                 <div class="page-header">
                     <div>
-                        <h1>Manage Family Members</h1>
+                        <h1>Manage New Members</h1>
                         <p>Add New members</p>
                                         {% if messages %}
                 <div class="message-container">

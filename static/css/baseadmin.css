@@ -1091,3 +1091,15 @@
                 transform: rotate(360deg);
             }
         }
+.event-detail label {
+    font-weight: 600;
+    min-width: 90px;
+    color: #8b4513;
+}
+
+.event-detail span {
+    flex: 1;
+    font-weight: 400;
+    color: #444;
+    word-break: break-word;
+}

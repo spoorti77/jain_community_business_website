@@ -1,14 +1,18 @@
-{% load static %}
+<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Family Dashboard</title>
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/baseadmin.css' %}">
- 
+    
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 <body>
     <div class="dashboard-container">
@@ -22,41 +26,65 @@
             <div class="sidebar-header">
                 <div class="sidebar-logo">
                     <i class="fas fa-users logo-icon"></i>
-                    <span>Family Hub</span>
+                    <span>Jain Parivar</span>
                 </div>
             </div>
 
-            <nav class="sidebar-nav">
-                <button class="nav-item active" onclick="switchTab('dashboard')" data-tab="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </button>
+           <nav class="sidebar-nav">
+    <button class="nav-item {% if request.path == '/admin_dashboard/' %}active{% endif %}" onclick="window.location.href='/admin_dashboard/'">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+    </button>
 
-                <button class="nav-item" onclick="window.location.href='/request-list/'" data-tab="family">
-                    <i class="fas fa-users"></i>
-                    <span>Manage Users</span>
-                </button>
-                <button class="nav-item" onclick="window.location.href='/event-list-admin/'" data-tab="settings">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Add Events</span>   
-                </button>
-                <button class="nav-item" onclick="window.location.href='/add-member-admin/'" data-tab="settings">
-                    <i class="fas fa-user"></i>
-                    <span>Add Members</span>   
-                </button>
-                    <button class="nav-item" onclick="window.location.href='/entrepreneurs/'" data-tab="settings">
-                    <i class="fas fa-business"></i>
+    <button class="nav-item {% if request.path == '/request-list/' %}active{% endif %}" onclick="window.location.href='/request-list/'">
+        <i class="fas fa-users"></i>
+        <span>Manage Users</span>
+    </button>
 
-                    <span>Add Entrepreneurs</span>   
-                </button>
-                <button class="nav-item" onclick="window.location.href='/review_address_requests/'" data-tab="events">
-                    <i class="fas fa-calendar"></i>
-                    <span> Address Change Requests</span>
-                </button>
-                
-                 <button class="nav-item" onclick="window.location.href='/logout/'" data-tab="logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>  
-                </button>
-            </nav>
+    <button class="nav-item {% if request.path == '/event-list-admin/' %}active{% endif %}" onclick="window.location.href='/event-list-admin/'">
+        <i class="fas fa-briefcase"></i>
+        <span>Add Events</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/add-member-admin/' %}active{% endif %}" onclick="window.location.href='/add-member-admin/'">
+        <i class="fas fa-user"></i>
+        <span>Add Members</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/entrepreneurs/' %}active{% endif %}" onclick="window.location.href='/entrepreneurs/'">
+        <i class="fas fa-user-tie"></i>
+        <span>Add Entrepreneurs</span>   
+    </button>
+
+    <button class="nav-item {% if request.path == '/review_address_requests/' %}active{% endif %}" onclick="window.location.href='/review_address_requests/'">
+        <i class="fas fa-calendar"></i>
+        <span>Address Change Requests</span>
+    </button>
+
+    <button class="nav-item {% if request.path == '/manage_annoucements/' %}active{% endif %}" onclick="window.location.href='/manage_annoucements/'">
+        <i class="fas fa-bullhorn"></i>
+        <span>Manage Announcements</span>
+    </button>
+
+    <button class="nav-item" onclick="window.location.href='/logout/'">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>  
+    </button>
+</nav>
+
         </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+            <script src="/static/js/script.js"></script>
+    <script src="/static/js/rajasthancities.js"></script>
+    <script src="/static/js/city.js"></script>
+</html>

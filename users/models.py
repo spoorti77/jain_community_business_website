@@ -23,9 +23,12 @@ class NewUser(AbstractUser):
     DOB = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    email = models.EmailField(unique=True, default='example@mail.com', blank=True)
+    email = models.EmailField(unique=True, default='example@mail.com', blank=True, null=True)
     password = models.CharField(max_length=128)
     phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)  # Unique phone number
+    is_phone_verified = models.BooleanField(default=False, null=True)  # ✅ New field
+    otp = models.CharField(max_length=6, blank=True, null=True)  # ✅ Store OTP temporarily
+    otp_created_at = models.DateTimeField(null=True, blank=True)  # ✅ OTP expiry tracking
     whatsapp_number = models.CharField(max_length=15, null=True, blank=True)  # Optional
     blood_group = models.CharField(max_length=10, blank=True)
     # Religious
@@ -89,6 +92,7 @@ class Event(models.Model):
     location = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     is_deleted = models.BooleanField(default=False)  # Soft delete
+    
 
     def soft_delete(self):
         self.is_deleted = True
@@ -172,3 +176,31 @@ class CommitteeMember(models.Model):
 
     def __str__(self):
         return self.name
+
+class Announcement(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    image = models.ImageField(upload_to='announcements/', null=True, blank=True)
+    created_at = models.DateField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+    
+class EventReadStatus(models.Model):
+    user = models.ForeignKey(NewUser, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
+    seen_at = models.DateTimeField(null=True, blank=True)
+
+# models.py
+
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.user.username} - {self.message[:20]}"

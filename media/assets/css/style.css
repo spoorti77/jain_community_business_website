@@ -1,0 +1,154 @@
+/* Custom Variables */
+:root {
+    --bs-brown: #8B4513;
+    --bs-light-brown: rgba(139, 69, 19, 0.1);
+}
+
+/* Font Family */
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Text Colors */
+.text-brown {
+    color: var(--bs-brown);
+}
+
+/* Background Colors */
+.bg-brown {
+    background-color: var(--bs-brown);
+}
+
+.bg-light-brown {
+    background-color: var(--bs-light-brown);
+}
+
+/* Buttons */
+.btn-brown {
+    background-color: var(--bs-brown);
+    color: white;
+    border-color: var(--bs-brown);
+}
+
+.btn-brown:hover {
+    background-color: transparent;
+    color: var(--bs-brown);
+    border-color: var(--bs-brown);
+}
+
+.btn-outline-brown {
+    border-color: var(--bs-brown);
+    color: var(--bs-brown);
+}
+
+.btn-outline-brown:hover {
+    background-color: var(--bs-brown);
+    color: white;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #373b3e 0%, rgba(0, 0, 0, 0.125) 100%),
+                url('/media/assets/bg/bg.png') no-repeat center center;
+    background-size: cover;
+    width: 100%; /* Full width */
+    height: 600px; /* Fixed height */
+    padding-top: 80px; /* Account for fixed navbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Footer Styles */
+footer .footer-title::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: var(--bs-brown);
+    bottom: 0;
+    left: 0;
+}
+
+footer .social-icon {
+    width: 45px;
+    height: 45px;
+    background: #333;
+    color: white;
+    transition: all 0.3s;
+}
+
+footer .social-icon:hover {
+    background: var(--bs-brown);
+    transform: translateY(-3px) scale(1.05);
+}
+
+footer .footer-link {
+    color: #bbb;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+}
+
+footer .footer-link:hover {
+    color: var(--bs-brown);
+}
+
+footer .footer-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background: var(--bs-brown);
+    bottom: -2px;
+    left: 0;
+    transition: width 0.3s;
+}
+
+footer .footer-link:hover::after {
+    width: 100%;
+}
+
+/* Scroll to top button */
+.btn-scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 999;
+}
+
+.btn-scroll-top.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Border Colors */
+.border-brown {
+    border-color: var(--bs-brown) !important;
+}
+
+/* Modal Customization */
+.modal-content {
+    border: 2px solid var(--bs-brown);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    footer .footer-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

@@ -1,727 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jain Parivar Hub - Our Team</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* General Body and Container Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "Inter", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f8f8; /* Light background for the page */
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation Bar Styles */
-        .navbar {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8B4513; /* Earthy brown */
-            font-family: 'Playfair Display', serif;
-        }
-
-        .nav-logo i {
-            margin-right: 10px;
-            font-size: 1.8rem;
-            color: #8B4513;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-menu li {
-            margin-left: 2rem;
-            position: relative;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-size: 0.95rem;
-        }
-
-        .nav-menu a:hover {
-            color: #8B4513;
-        }
-
-        .nav-menu li::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            background: #8B4513;
-            bottom: -5px;
-            left: 0;
-            transition: width 0.3s;
-        }
-
-        .nav-menu li:hover::after {
-            width: 100%;
-        }
-
-        .btn-login {
-            background: #8B4513;
-            color: white !important;
-            padding: 10px 25px;
-            border-radius: 30px;
-            transition: all 0.3s;
-            font-weight: 500;
-            border: 2px solid #8B4513;
-        }
-
-        .btn-login:hover {
-            background: transparent;
-            color: #8B4513 !important;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 2px;
-            background: #555;
-            margin: 4px 0;
-            transition: 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-
-        /* Section Header Styles (consistent with previous designs) */
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding-top: 120px; /* Adjusted padding to account for fixed navbar height */
-        }
-
-        .section-header h2 {
-            font-size: 2.8rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-            font-family: 'Playfair Display', serif;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 4px;
-            background: #8B4513; /* Earthy brown */
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 25px;
-        }
-
-        /* Team Members Grid */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-            padding-bottom: 100px;
-        }
-
-        .member-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .member-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #8B4513, #a0522d); /* Gradient top border */
-            border-radius: 12px 12px 0 0;
-            transition: height 0.3s ease;
-        }
-
-        .member-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .member-card:hover::before {
-            height: 8px;
-        }
-
-        .member-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-            border: 4px solid #f0f0f0; /* Light border for photo */
-            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.2); /* Ring shadow */
-            transition: all 0.3s ease;
-        }
-
-        .member-card:hover .member-photo {
-            border-color: #8B4513;
-            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.4);
-        }
-
-        .member-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .member-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .member-position {
-            font-size: 1rem;
-            color: #8B4513; /* Earthy brown for position */
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .member-contact {
-            font-size: 1.1rem;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1rem;
-            font-weight: 500;
-        }
-
-        .member-contact i {
-            color: #8B4513;
-            font-size: 1.2rem;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 80px;
-                flex-direction: column;
-                background-color: white;
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 2rem 0;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                margin: 1.5rem 0;
-            }
-
-            .section-header {
-                padding-top: 100px; /* Adjust padding for smaller screens */
-            }
-
-            .section-header h2 {
-                font-size: 2.2rem;
-            }
-            .team-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-            }
-            .member-card {
-                padding: 2rem 1.5rem;
-            }
-            .member-photo {
-                width: 100px;
-                height: 100px;
-            }
-            .member-name {
-                font-size: 1.3rem;
-            }
-            .member-position {
-                font-size: 0.9rem;
-            }
-            .member-contact {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .section-header h2 {
-                font-size: 1.8rem;
-            }
-            .team-grid {
-                grid-template-columns: 1fr; /* Single column on very small screens */
-                gap: 1.5rem;
-            }
-            .member-card {
-                max-width: 320px; /* Constrain width for single column */
-                margin: 0 auto; /* Center cards */
-            }
-        }
-
-        .footer {
-            background: #222; /* Dark background */
-            color: #bbb; /* Light text color */
-            padding: 80px 0 30px;
-            font-size: 0.95rem;
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid columns */
-            gap: 3rem;
-            margin-bottom: 3rem;
-            padding-bottom: 3rem; /* Padding before the bottom line */
-            border-bottom: 1px solid #333; /* Separator line */
-        }
-
-        .footer-about .footer-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.8rem; /* Slightly larger for prominence */
-            font-weight: 700;
-            color: #8B4513; /* Earthy brown for the logo */
-            margin-bottom: 1.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .footer-about .footer-logo i {
-            margin-right: 10px;
-            font-size: 2.2rem; /* Larger icon */
-            color: #8B4513;
-        }
-
-        .footer-about p {
-            color: #bbb;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 1rem;
-            margin-top: 20px;
-        }
-
-        .footer-social a {
-            width: 45px;
-            height: 45px;
-            background: #333; /* Darker background for social icons */
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Subtle shadow */
-        }
-
-        .footer-social a:hover {
-            background: #8B4513; /* Earthy brown on hover */
-            transform: translateY(-3px) scale(1.05); /* Lift and slight scale effect */
-        }
-
-        .footer-title {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem; /* Slightly larger titles */
-            position: relative;
-            padding-bottom: 10px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            width: 50px; /* Longer underline */
-            height: 3px; /* Thicker underline */
-            background: #8B4513;
-            bottom: 0;
-            left: 0;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a,
-        .footer-contact-info a,
-        .footer-bottom-content a {
-            color: #bbb;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            background: #8B4513;
-            bottom: -2px;
-            left: 0;
-            transition: width 0.3s ease;
-        }
-
-        .footer-links a:hover,
-        .footer-contact-info a:hover,
-        .footer-bottom-content a:hover {
-            color: #8B4513;
-            transform: translateX(5px); /* Slide effect on hover */
-        }
-
-        .footer-links a:hover::after {
-            width: 100%;
-        }
-
-        .footer-contact-info {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-contact-info li {
-            display: flex;
-            align-items: flex-start; /* Align icon and text at the top */
-            margin-bottom: 1rem;
-            color: #bbb;
-        }
-
-        .footer-contact-info li i {
-            margin-right: 12px;
-            color: #8B4513;
-            font-size: 1.1rem;
-            flex-shrink: 0; /* Prevent icon from shrinking */
-            width: 20px; /* Fixed width for icons */
-            text-align: center;
-        }
-
-        /* Footer Bottom Section */
-        .footer-bottom {
-            padding-top: 2rem;
-            text-align: center;
-            color: #bbb;
-            font-size: 0.85rem; /* Smaller font for bottom text */
-        }
-
-        .footer-bottom-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 1rem; /* Space between elements when wrapped */
-        }
-
-        .footer-bottom-content .developer-info {
-            flex-grow: 1; /* Allows it to take available space */
-            text-align: left; /* Align to left by default */
-        }
-
-        .footer-bottom-content p {
-            margin: 0; /* Remove default paragraph margins */
-        }
-
-        /* Responsive Design for Footer */
-        @media (max-width: 768px) {
-            .footer-container {
-                grid-template-columns: 1fr; /* Stack columns on small screens */
-                text-align: center;
-            }
-
-            .footer-about .footer-logo,
-            .footer-title {
-                justify-content: center; /* Center logo and titles */
-            }
-
-            .footer-title::after {
-                left: 50%;
-                transform: translateX(-50%); /* Center underline */
-            }
-
-            .footer-social {
-                justify-content: center; /* Center social icons */
-            }
-
-            .footer-contact-info li {
-                justify-content: center; /* Center contact info */
-            }
-            .footer-contact-info li i {
-                margin-right: 8px; /* Adjust margin for smaller screens */
-            }
-
-            .footer-bottom-content {
-                flex-direction: column; /* Stack bottom content */
-                text-align: center;
-            }
-
-            .footer-bottom-content .developer-info {
-                text-align: center; /* Center developer info on small screens */
-            }
-    </style>
-</head>
-<body>
-
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-lotus"></i>
-                <span>Jain Parivar </span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/contact/">Contact Us</a></li>
-                <li><a href="/committeemembers/">Committee Members</a></li>
-                  <li><a href="/jainammembers/">Jainam Members</a></li>
-                <li><a href="/about/">About Us</a></li>
-                <li><a href="/login/" class="btn-login">Login</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+{% extends "base1.html" %}
+
+{% block title %}Home | Jain Parivar{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="/media/assets/css/style.css">
+  <style>
+    .team-section {
+      padding-top: 80px;
+      margin-top: -30px;
+    }
+
+    .member-card {
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+    .member-card:hover {
+      transform: translateY(-5px);
+    }
+    .member-photo img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #8B4513;
+    }
+    .member-name {
+      font-size: 1.1rem; /* Adjust this value to change name font size */
+      font-weight: 600;
+      margin: 10px 0;
+    }
+    .member-position {
+      color: #8B4513;
+      font-weight: 500;
+      font-size: 0.9rem; /* Position font size */
+    }
+    .member-contact {
+      font-size: 0.9rem; /* Phone number font size */
+    }
+    .member-contact a {
+      color: #333;
+      text-decoration: none;
+    }
+    .member-contact a:hover {
+      color: #8B4513;
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="team-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5" style="padding-top:80px">
+            <h2 class="font-playfair">Our Esteemed Team</h2>
+            <!-- <p class="lead">Meet the dedicated individuals leading the Jain Parivar Hub, committed to our community's success.</p> -->
         </div>
-    </nav>
 
-    <section class="team-section">
-        <div class="container">
-            <div class="section-header">
-                <h2> Jainam Team</h2>
-                <p>Meet the dedicated individuals leading the Jain Parivar Hub, committed to our community's success.</p>
-            </div>
-
-            <div class="team-grid">
-                <!-- Member Card Template -->
-                <!-- Data will be dynamically inserted here by JavaScript -->
-            </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 team-grid">
+            <!-- Cards will be inserted here by JavaScript -->
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer class="footer">
-            <div class="container">
-                <div class="footer-container">
-                    <div class="footer-about">
-                        <div class="footer-logo">
-                            <i class="fas fa-lotus"></i> <!-- Replaced img with icon -->
-                            Jain Parivar Hub
-                        </div>
-                        <p>Connecting the global Jain business community to foster growth, collaboration, and success while upholding Jain values.</p>
-                        <div class="footer-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="footer-links-section">
-                        <h3 class="footer-title">Quick Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#about">About Us</a></li>
-
-                            <li><a href="#community">Community Hub</a></li> <!-- Changed from #events to #community -->
-                            <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-contact">
-                        <h3 class="footer-title">Contact Info</h3>
-                        <ul class="footer-contact-info">
-                            <li>
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Jainam, Stanakvasi Jain Sangh Kanchgar Galli Hubballi -580020</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone"></i>
-                                <span>+91 22 1234 5678</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-envelope"></i>
-                                <span>info@jainamparivar.org</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-clock"></i>
-                                <span>Mon-Fri: 9AM - 6PM</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <div class="footer-bottom-content">
-                        <p class="developer-info">Designed & Developed by <a href="#" class="footer-link">Haegl Technologies Pvt Ltd</a> for Jainam Parivar</p>
-                        <p>&copy; <span id="year"></span> Jain Business Connect. All Rights Reserved. | <a href="#" class="footer-link">Privacy Policy</a> | <a href="#" class="footer-link">Terms of Service</a></p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-    <script>
-    const teamMembersData = [
-  { name: "ABC XYZ", position: "PRESIDENT", tel: "8073301266" },
-  { name: "DEF LMN", position: "HON.PRESIDENT", tel: "9019789131" },
-  { name: "GHI OPQ", position: "WORKING PRESIDENT", tel: "9845215644" },
-  { name: "JKL RST", position: "SECRETARY", tel: "9448061288" },
-  { name: "MNO UVW", position: "V.P", tel: "9480041222" },
-  { name: "PQR XYZ", position: "V.P", tel: "9448823152" },
-  { name: "STU LMN", position: "TREASURER", tel: "9448233030" },
-  { name: "VWX OPQ", position: "JOINT.TREASURER", tel: "9448143174" },
-  { name: "YZA RST", position: "JOINT SEC.", tel: "9448116626" },
-  { name: "BCD UVW", position: "DIRECTOR", tel: "9886010095" },
-  { name: "EFG XYZ", position: "DIRECTOR", tel: "9448362030" },
-  { name: "HIJ LMN", position: "DIRECTOR", tel: "9480128340" },
-  { name: "KLM OPQ", position: "DIRECTOR", tel: "9448358995" },
-  { name: "NOP RST", position: "DIRECTOR", tel: "9448368176" },
-  { name: "QRS UVW", position: "DIRECTOR", tel: "9448116566" },
-  { name: "TUV XYZ", position: "DIRECTOR", tel: "9448629834" },
-  { name: "WXY LMN", position: "DIRECTOR", tel: "9483758917" },
-  { name: "ZAB OPQ", position: "DIRECTOR", tel: "9880224323" },
-  { name: "CDE RST", position: "DIRECTOR", tel: "8722446699" },
-  { name: "FGH UVW", position: "DIRECTOR", tel: "9448222059" },
-  { name: "IJK XYZ", position: "DIRECTOR", tel: "9448301451" },
-  { name: "LMN LMN", position: "DIRECTOR", tel: "9484512330" },
-  { name: "OPQ OPQ", position: "DIRECTOR", tel: "9448390593" },
-  { name: "RST RST", position: "DIRECTOR", tel: "9844083936" },
-  { name: "UVW UVW", position: "ADVISER", tel: "9900677650" },
-  { name: "XYZ XYZ", position: "ADVISER", tel: "9448139888" },
-  { name: "ABC ABC", position: "ADVISER", tel: "9448382617" },
-  { name: "DEF DEF", position: "ADVISER", tel: "9448142151" },
-  { name: "GHI GHI", position: "ADVISER", tel: "9900555108" },
-  { name: "JKL JKL", position: "ADVISER", tel: "6361505492" },
-  { name: "MNO MNO", position: "ADVISER", tel: "9845266107" }
+<script>
+const teamMembersData = [
+{ name: "ABC XYZ", position: "PRESIDENT", tel: "8073301266" },
+{ name: "DEF LMN", position: "HON.PRESIDENT", tel: "9019789131" },
+{ name: "GHI OPQ", position: "WORKING PRESIDENT", tel: "9845215644" },
+{ name: "JKL RST", position: "SECRETARY", tel: "9448061288" },
+{ name: "MNO UVW", position: "V.P", tel: "9480041222" },
+{ name: "PQR XYZ", position: "V.P", tel: "9448823152" },
+{ name: "STU LMN", position: "TREASURER", tel: "9448233030" },
+{ name: "VWX OPQ", position: "JOINT.TREASURER", tel: "9448143174" },
+{ name: "YZA RST", position: "JOINT SEC.", tel: "9448116626" },
+{ name: "BCD UVW", position: "DIRECTOR", tel: "9886010095" },
+{ name: "EFG XYZ", position: "DIRECTOR", tel: "9448362030" },
+{ name: "HIJ LMN", position: "DIRECTOR", tel: "9480128340" },
+{ name: "KLM OPQ", position: "DIRECTOR", tel: "9448358995" },
+{ name: "NOP RST", position: "DIRECTOR", tel: "9448368176" },
+{ name: "QRS UVW", position: "DIRECTOR", tel: "9448116566" },
+{ name: "TUV XYZ", position: "DIRECTOR", tel: "9448629834" },
+{ name: "WXY LMN", position: "DIRECTOR", tel: "9483758917" },
+{ name: "ZAB OPQ", position: "DIRECTOR", tel: "9880224323" },
+{ name: "CDE RST", position: "DIRECTOR", tel: "8722446699" },
+{ name: "FGH UVW", position: "DIRECTOR", tel: "9448222059" },
+{ name: "IJK XYZ", position: "DIRECTOR", tel: "9448301451" },
+{ name: "LMN LMN", position: "DIRECTOR", tel: "9484512330" },
+{ name: "OPQ OPQ", position: "DIRECTOR", tel: "9448390593" },
+{ name: "RST RST", position: "DIRECTOR", tel: "9844083936" },
+{ name: "UVW UVW", position: "ADVISER", tel: "9900677650" },
+{ name: "XYZ XYZ", position: "ADVISER", tel: "9448139888" },
+{ name: "ABC ABC", position: "ADVISER", tel: "9448382617" },
+{ name: "DEF DEF", position: "ADVISER", tel: "9448142151" },
+{ name: "GHI GHI", position: "ADVISER", tel: "9900555108" },
+{ name: "JKL JKL", position: "ADVISER", tel: "6361505492" },
+{ name: "MNO MNO", position: "ADVISER", tel: "9845266107" }
 ];
-        document.addEventListener('DOMContentLoaded', () => {
-            const teamGrid = document.querySelector('.team-grid');
+    document.addEventListener('DOMContentLoaded', () => {
+        const teamGrid = document.querySelector('.team-grid');
 
-            teamMembersData.forEach(member => {
-                const memberCard = document.createElement('div');
-                memberCard.classList.add('member-card');
+        teamMembersData.forEach(member => {
+            const col = document.createElement('div');
+            col.classList.add('col');
 
-                // Generate a placeholder image URL based on the member's initials
-                const initials = member.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-                const placeholderColor = '#8B4513'; // Earthy brown for placeholder background
-                const textColor = 'ffffff'; // White text
-                const imageUrl = `https://placehold.co/120x120/${placeholderColor.substring(1)}/${textColor}?text=${initials}`;
+            const memberCard = document.createElement('div');
+            memberCard.classList.add('member-card', 'card', 'h-100', 'p-3', 'text-center', 'shadow-sm');
 
+            // Generate a placeholder image URL
+            const initials = member.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            const placeholderColor = '8B4513'; // Earthy brown
+            const textColor = 'ffffff'; // White text
+            const imageUrl = `https://placehold.co/120x120/${placeholderColor}/${textColor}?text=${initials}`;
 
-                memberCard.innerHTML = `
-                    <div class="member-photo">
-                        <img src="${imageUrl}" alt="${member.name}">
+            memberCard.innerHTML = `
+                <div class="card-body">
+                    <div class="member-photo mb-3">
+                        <img src="${imageUrl}" alt="${member.name}" class="img-fluid">
                     </div>
-                    <h3 class="member-name">${member.name}</h3>
-                    <p class="member-position">${member.position}</p>
-                    <p class="member-contact"><i class="fas fa-phone"></i> <a href="tel:${member.tel}">${member.tel}</a></p>
-                `;
-                teamGrid.appendChild(memberCard);
-            });
+                    <h3 class="member-name h5">${member.name}</h3>
+                    <p class="member-position mb-2">${member.position}</p>
+                    <p class="member-contact"><i class="fas fa-phone me-2"></i><a href="tel:${member.tel}">${member.tel}</a></p>
+                </div>
+            `;
 
-            // Hamburger menu functionality
-            const hamburger = document.querySelector('.hamburger');
-            const navMenu = document.querySelector('.nav-menu');
+            col.appendChild(memberCard);
+            teamGrid.appendChild(col);
+        });
 
+        // Hamburger menu functionality (if needed)
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (hamburger && navMenu) {
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navMenu.classList.toggle('active');
@@ -733,8 +144,7 @@
                     navMenu.classList.remove('active');
                 });
             });
-        });
-    </script>
-
-</body>
-</html>
+        }
+    });
+</script>
+{% endblock %}

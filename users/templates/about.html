@@ -1,158 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>About Us - Jain Business Community</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base1.html" %}
+
+{% block title %}About Us | Jain Parivar{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="/media/assets/css/style.css">
   <style>
-    /* Fonts and base styling */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fdf7f0;
-      color: #642d03;
-    }
-    header {
-      background-color: #642d03;
-      padding: 1rem 2rem;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2em;
+    /* About Section Styling */
+    .about-section {
+      padding: 80px 0;
+      background-color: #f9f9f9;
     }
 
-    .about-section {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
+    .about-container {
+      display: flex;
+      max-width: 1200px;
+      margin: 10px auto;
+      padding: 0 40px;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .logo-column {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-column img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .content-column {
+      flex: 2;
     }
 
     .about-section h2 {
-      font-size: 1.8em;
-      color: #642d03;
-      margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
+      color: #8B4513;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+      font-size: 2.2rem;
+    }
+
+    .about-section h2::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background: #8B4513;
+      bottom: 0;
+      left: 0;
     }
 
     .about-section p {
-      line-height: 1.6;
-      font-size: 1.1em;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 40px;
     }
 
     .highlight {
-      font-weight: bold;
-      color: #a0522d;
+      color: #8B4513;
+      font-weight: 600;
     }
 
-    footer {
-      background-color: #5c4033;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
-    }
-     .contact-container {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .contact-container h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: #642d03;
-      margin-bottom: 1rem;
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .about-container {
+        flex-direction: column;
+        gap: 40px;
+        padding: 0 30px;
+      }
+      
+      .logo-column, .content-column {
+        width: 100%;
+      }
+      
+      .logo-column {
+        max-width: 400px;
+        margin: 0 auto;
+      }
     }
 
-    .contact-info {
-      margin-bottom: 2rem;
-      line-height: 1.8;
+    @media (max-width: 768px) {
+      .about-section {
+        padding: 60px 0;
+      }
+
+      .about-container {
+        padding: 0 20px;
+        gap: 30px;
+      }
+
+      .about-section h2 {
+        font-size: 1.8rem;
+      }
+
+      .about-section p {
+        font-size: 1.1rem;
+      }
     }
 
-    .contact-info div {
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-info strong {
-      color: #642d03;
-    }
-
-    .contact-container form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .contact-container form input,
-    .contact-container form textarea {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-    }
-
-    .contact-container form textarea {
-      grid-column: 1 / -1;
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .contact-container form button {
-      background-color: #642d03;
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      grid-column: 1 / -1;
-    }
-    
-    nav a {
-      color: #fff;
-      margin-left: 1.5rem;
-      text-decoration: none;
-      font-weight: 500;
+    @media (max-width: 576px) {
+      .about-container {
+        padding: 0 15px;
+      }
     }
   </style>
-</head>
-<body>
+{% endblock %}
 
-  <!-- Header -->
-  <header>
-    <div class="logo">Jain Business Community</div>
-    <nav>
-      <a href="/index/">Home</a>
-      <a href="/about/">About</a>
-      <a href="/contact/">Contact</a>
-    </nav>
-  </header>
+{% block content %}
+<!-- About Section -->
+ &nbsp;
+ <br>
+<section class="about-section">
+  <div class="about-container">
+    <!-- Left Column - Logo -->
+    <div class="logo-column">
+      <img src="/media/assets/logo/logo.png" alt="Jain Parivar Logo" style="max-width: 350px;">
+    </div>
+    
+    <!-- Right Column - Content -->
+    <div class="content-column">
+      <h2>Who We Are</h2>
+      <p>
+        We are a passionate group of entrepreneurs and professionals united by a shared goal – to foster growth, collaboration, and success within the Jain business community. Our platform connects members across industries, enabling them to network, exchange ideas, and scale their ventures.
+      </p>
 
-  <section class="about-section">
-    <h2>Who We Are</h2>
-    <p>
-      We are a passionate group of entrepreneurs and professionals united by a shared goal – to foster growth, collaboration, and success within the Jain business community. Our platform connects members across industries, enabling them to network, exchange ideas, and scale their ventures.
-    </p>
+      <h2>Our Mission</h2>
+      <p>
+        Our mission is to build a thriving ecosystem where Jain entrepreneurs and professionals can <span class="highlight">connect, grow, and prosper</span>. We believe in the power of community, mentorship, and collective progress.
+      </p>
 
-    <h2>Our Mission</h2>
-    <p>
-      Our mission is to build a thriving ecosystem where Jain entrepreneurs and professionals can <span class="highlight">connect, grow, and prosper</span>. We believe in the power of community, mentorship, and collective progress.
-    </p>
-
-    <h2>What We Offer</h2>
-    <p>
-      From curated business directories and job boards to inspiring events and mentorship programs, we provide the tools and resources that our community needs to succeed in today’s competitive world.
-    </p>
-  </section>
-
-
-</body>
-</html>
+      <h2>What We Offer</h2>
+      <p>
+        From curated business directories and job boards to inspiring events and mentorship programs, we provide the tools and resources that our community needs to succeed in today's competitive world.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

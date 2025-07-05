@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from .models import NewUser,FamilyMember,Event,Invite,AddressChangeRequest
+from .models import NewUser,FamilyMember,Event,Invite,AddressChangeRequest,Announcement
 from django.core.files.storage import default_storage
 from django.contrib import messages
 from django.utils.dateparse import parse_date
@@ -27,12 +27,15 @@ from django.shortcuts import redirect
 from django.utils.dateparse import parse_date
 from .models import FamilyMember, NewUser
 from django.utils import timezone  # <-- Make sure this is at the top
+import random
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 def index(request):
-    """
-    Render the index page.
-    """
-    return render(request, 'index1.html')
+    entrepreneurs = Entrepreneur.objects.filter(is_deleted=False).order_by('-id')
+    events = Event.objects.filter(user_id=1, is_deleted=False).order_by('-date')
+    return render(request, 'index1.html', {'entrepreneurs': entrepreneurs, 'events':events})
 
 def committeemembers(request):
     """
@@ -67,7 +70,7 @@ def register_user(request):
         gotra = request.POST.get("gotra", "")
         dob = request.POST.get("dob")
         gender = request.POST.get("gender")
-        email = request.POST.get("email")
+        email = request.POST.get("email", "")
         phone = request.POST.get("phone")
         whatsapp_number = request.POST.get("whatsappNumber", "")
         blood_group = request.POST.get("bloodGroup", "")
@@ -137,10 +140,11 @@ def register_user(request):
                 website=website,
                 business_address=business_address,
 
-                profile_picture=profile_picture
+                profile_picture=profile_picture,
+              
             )
 
-            messages.success(request, "Registration successful!")
+            messages.success(request, "Your registration was successful. Please wait until your account is approved by the admin.")
             return redirect('login')
         except IntegrityError as e:
             print(f"Error saving user: str{e}")
@@ -149,33 +153,74 @@ def register_user(request):
     return render(request, 'register.html')
 
 
+# Temporary in-memory store
+OTP_STORE = {}
 
+@csrf_exempt
+def send_otp(request):
+    if request.method == 'POST':
+        phone = request.POST.get('phone')
+        if phone:
+            otp = str(random.randint(100000, 999999))
+            OTP_STORE[phone] = otp
+            print(f"OTP for {phone} is {otp}")  # Log to console for testing
+            return JsonResponse({'success': True, 'message': 'OTP sent (check server console).'})
+        return JsonResponse({'success': False, 'message': 'Phone number missing.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def verify_otp(request):
+    if request.method == 'POST':
+        phone = request.POST.get('phone')
+        otp = request.POST.get('otp')
+        if phone and otp:
+            stored_otp = OTP_STORE.get(phone)
+            if stored_otp == otp:
+                return JsonResponse({'success': True, 'message': 'OTP verified successfully.'})
+            return JsonResponse({'success': False, 'message': 'Invalid OTP.'})
+        return JsonResponse({'success': False, 'message': 'Phone or OTP missing.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+User = get_user_model()
 
 def login_user(request):
     if request.method == 'POST':
-        phone_number = request.POST.get('username')  # phone number as username
+        phone_number = request.POST.get('username')  # used as username
         password = request.POST.get('password')
 
-        user = authenticate(request, username=phone_number, password=password)
+        try:
+            user_obj = User.objects.get(username=phone_number)
+        except User.DoesNotExist:
+            user_obj = None
 
-        if user is not None:
-            if not user.is_active:
-                messages.error(request, "Your account is not active. Please contact Admin.")
+        if user_obj:
+            if not user_obj.is_active:
+                # Show custom message based on user_type
+                if user_obj.user_type == 'Admin':
+                    messages.error(request, "Admin account is not activated. Please contact support.")
+                else:
+                    messages.error(request, "Your account is not active. Please contact admin.")
                 return render(request, 'login.html')
 
-            if hasattr(user, 'user_type'):
+            # User is active, now try to authenticate
+            user = authenticate(request, username=phone_number, password=password)
+            if user:
+                login(request, user)
                 if user.user_type == 'Admin':
-                    login(request, user)
                     return redirect('admin_dashboard')
                 elif user.user_type == 'User':
-                    login(request, user)
                     return redirect('dashboard')
                 else:
-                    login(request, user)
-                    return redirect('dashboard')  # fallback
+                    return redirect('dashboard')
             else:
-                login(request, user)
-                return redirect('dashboard')
+                messages.error(request, "Invalid phone number or password.")
         else:
             messages.error(request, "Invalid phone number or password.")
 
@@ -224,6 +269,10 @@ def user_dashboard(request):
     user = request.user  # Get the logged-in user
     user_id = request.session.get('user_id')  # Get the user ID from the session
     all_users = NewUser.objects.exclude(user_type='Admin')  # Get all users for the dashboard
+    admin_users = NewUser.objects.filter(user_type='Admin')
+    announcements = Event.objects.filter(user__in=admin_users, is_deleted=False).order_by('-created_at')
+    general_announcements = Announcement.objects.filter(user__in=admin_users, is_deleted=False).order_by('-created_at')
+    invites = Invite.objects.filter(members=user).select_related('event', 'user').order_by('-invited_at')
 
 
     # Get all family members linked to the logged-in user
@@ -273,6 +322,9 @@ def user_dashboard(request):
         'events_count': events_count,
         'upcoming_events': upcoming_events,
         'upcoming_events_count': upcoming_events_count,
+        'announcements': announcements,
+        'general_announcements' : general_announcements,
+        'invites': invites
 
     }
     return render(request, 'user_dashboard.html', context)
@@ -336,6 +388,12 @@ def add_member_admin(request):
     return render(request, 'add_member_admin.html', context)# register a new user
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.utils.dateparse import parse_date
+from django.contrib.auth.hashers import make_password
+from .models import NewUser  # adjust this import if needed
+
 @login_required
 def add_new_user(request):
     if request.method == 'POST':
@@ -350,8 +408,6 @@ def add_new_user(request):
         phone = request.POST.get("phone")
         whatsapp_number = request.POST.get("whatsappNumber", "")
         blood_group = request.POST.get("bloodGroup", "")
-
-
 
         pant = request.POST.get("pant")
         pant_option = request.POST.get("pantOption")
@@ -375,11 +431,12 @@ def add_new_user(request):
         if not DOB:
             return render(request, 'add_new_user.html', {'error': 'Invalid DOB format'})
 
-        default_password = make_password(DOB.strftime('%m%d%Y'))
+        # Use phone as username and password
+        default_password = make_password(phone)
 
         # Create user
         NewUser.objects.create(
-            username=email,
+            username=phone,
             first_name=first_name,
             middle_name=middle_name,
             last_name=last_name,
@@ -414,56 +471,46 @@ def add_new_user(request):
 
 
 
-@csrf_exempt
-@login_required
-def add_family_member_admin(request):
-    if request.method == "POST":
-        main_user_id = request.POST.get('main_user_id')  # This is HOF ID
-        print('######', main_user_id)
-        name = request.POST.get("name")
-        relationship = request.POST.get("relationship")
-        birthday_str = request.POST.get("birthday")
-        phone = request.POST.get("phone")
-        email = request.POST.get("email")
-        whatsapp = request.POST.get("whatsappNumber")
-        gender = request.POST.get("Gender")
-        address = request.POST.get("address")
-        notes = request.POST.get("notes")
 
-        # Basic validations
-        if not phone:
-            messages.error(request, "Phone number is required.")
-            return redirect("add_member_admin")
+def add_family_member_for_user(request, pk):
+    main_user = get_object_or_404(NewUser, pk=pk)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        relationship = request.POST.get('relationship')
+        birthday = request.POST.get('birthday')
+        gender = request.POST.get('Gender')
+        phone = request.POST.get('phone')
+        whatsapp = request.POST.get('whatsappNumber')
+        email = request.POST.get('email')
+        blood_group = request.POST.get('blood_group', '')
+        address = request.POST.get('address')
+        notes = request.POST.get('notes')
 
         if FamilyMember.objects.filter(phone=phone).exists():
-            messages.error(request, "Phone number already exists.")
-            return redirect("add_member_admin")
+            messages.error(request, "A family member with this phone already exists.")
+        else:
+            family_member = FamilyMember(
+                main_user=main_user,
+                head_of_family=main_user,
+                name=name,
+                relationship=relationship,
+                birthday=birthday or None,
+                gender=gender,
+                phone=phone,
+                whatsapp=whatsapp,
+                email=email,
+                blood_group=blood_group,
+                address=address,
+                notes=notes,
+            )
+            family_member.set_password(phone)  # Set password as phone
+            family_member.save()
+            messages.success(request, f"Family member added for {main_user.first_name}.")
+            return redirect('add_family_member_for_user', pk=pk)
 
+    return render(request, 'add_member_admin.html', {'main_user': main_user})
 
-        main_user = get_object_or_404(NewUser, id=main_user_id)
-
-        # Parse birthday
-        birthday = parse_date(birthday_str) if birthday_str else None
-
-        member = FamilyMember.objects.create(
-            main_user=main_user, # head of the family
-            head_of_family=main_user,  # ✅ Fix applied 
-            name=name,
-            relationship=relationship,
-            birthday=birthday,
-            phone=phone,
-            email=email,
-            whatsapp=whatsapp,
-            gender=gender,
-            address=address,
-            notes=notes,
-            password=make_password(phone)  # using phone as default password
-        )
-
-        messages.success(request, f"Family member '{name}' added under '{main_user.first_name} {main_user.last_name}'.")
-        return redirect("add_member_admin")
-
-    return redirect("add_member_admin")
 
 
 @csrf_exempt
@@ -479,6 +526,7 @@ def add_family_member(request):
         email = request.POST.get("email")
         whatsapp = request.POST.get("whatsappNumber")
         gender = request.POST.get("Gender")
+        blood_group = request.POST.get("bloodGroup", "")
         address = request.POST.get("address")
         notes = request.POST.get("notes")
 
@@ -502,6 +550,7 @@ def add_family_member(request):
             email=email,
             whatsapp=whatsapp,
             gender=gender,
+            blood_group=blood_group,
             address=address,
             notes=notes
         )
@@ -677,11 +726,6 @@ def deactivate_user(request, user_id):
     return redirect('search_members')
 
 
-
-
-from django.http import JsonResponse
-from .models import NewUser
-
 def get_member_details(request, user_id):
     try:
         member = NewUser.objects.get(id=user_id)
@@ -811,6 +855,8 @@ def add_event(request):
             description=description
         )
 
+        
+
         messages.success(request, f"Event '{title}' added successfully.")
         return redirect('event_list')
 
@@ -890,7 +936,7 @@ from .models import Entrepreneur
 
 def entrepreneur_list(request):
     entrepreneurs = Entrepreneur.objects.filter(is_deleted=False).order_by('-id')
-    return render(request, 'entrepreneur_list.html', {'entrepreneurs': entrepreneurs})
+    return render(request, 'el.html', {'entrepreneurs': entrepreneurs})
 
 @csrf_exempt
 def add_entrepreneur(request):
@@ -967,6 +1013,23 @@ def get_event_details(request, event_id):
     except Event.DoesNotExist:
         return JsonResponse({"error": "Event not found"}, status=404)
 
+def get_entreprenuers_details(request, event_id):
+    # ✅ Step 1: Check if user is authenticated
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Authentication required"}, status=401)
+
+    try:
+        # ✅ Step 2: Only fetch events belonging to the logged-in user
+        event = Entrepreneur.objects.get(id=event_id, user=request.user)
+        data = {
+            "name": event.name,
+            "company": event.company_name,
+            "phone": event.phone,
+            "location": event.address,
+        }
+        return JsonResponse(data)
+    except Event.DoesNotExist:
+        return JsonResponse({"error": "Event not found"}, status=404)
 
 
 def delete_event(request, event_id):
@@ -979,6 +1042,16 @@ def delete_event(request, event_id):
             messages.error(request, "Event not found.")
     return redirect('dashboard')
 
+
+def delete_entre(request, event_id):
+    if request.method == 'POST':
+        try:
+            event = Entrepreneur.objects.get(id=event_id, added_by_id=request.user.id)
+            event.delete()
+            messages.success(request, "Entrepreneur deleted successfully.")
+        except Event.DoesNotExist:
+            messages.error(request, "Event not found.")
+    return redirect('entrepreneur_list')
 
 from django.shortcuts import render, redirect
 from .models import Event
@@ -1041,15 +1114,11 @@ def event_list_admin(request):
     return render(request, 'event_list_admin.html', context)
 
 
-# views.py
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from .models import Event, NewUser
 
 @login_required
 def invite_member(request, event_id):
-    print("✅ invite_member called with event_id:", event_id)
+    
 
     selected_event = get_object_or_404(Event, id=event_id)
     events = Event.objects.all().order_by('-date')
@@ -1095,7 +1164,7 @@ def invite_member(request, event_id):
 
 @login_required
 def search_members_events(request, event_id):
-    print("✅ search_members_events called with event_id:", event_id)
+    
     event = get_object_or_404(Event, id=event_id)
 
     members = NewUser.objects.exclude(user_type='Admin')
@@ -1257,9 +1326,7 @@ def review_address_requests(request):
     requests = AddressChangeRequest.objects.all().order_by('-created_at')
     return render(request, 'review_requests.html', {'requests': requests})
 
-from django.utils import timezone
-from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404
+
 
 def approve_request(request, req_id):
     req = get_object_or_404(AddressChangeRequest, id=req_id)
@@ -1289,3 +1356,30 @@ def reject_request(request, req_id):
 
     messages.info(request, "Request rejected.")
     return redirect('review_requests')
+
+def manage_announcements(request):
+    all_announcements = Announcement.objects.filter(is_deleted=False)
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        image = request.FILES.get("image")
+        message = request.POST.get('message')
+
+        Announcement.objects.create(
+            user=request.user,
+            title=title,
+            image=image,
+            message=message,
+            )
+        messages.info(request,"announcement created")
+        return redirect('manage_announcements')
+    return render(request,'manage_announcements.html',{'all_announcements': all_announcements})
+
+@login_required
+def delete_announcement(request, announcement_id):
+    announcement = get_object_or_404(Announcement, id=announcement_id, is_deleted=False)
+
+
+    announcement.is_deleted = True
+    announcement.save()
+    return redirect('manage_announcements')  # change this to your actual redirect view name
